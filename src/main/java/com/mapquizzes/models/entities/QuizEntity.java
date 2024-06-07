@@ -19,5 +19,5 @@ public class QuizEntity {
     @NotNull @NotBlank
     private String name;
     @OneToMany(mappedBy = "quiz", fetch = FetchType.LAZY)
-    private Collection<QuizQuestionEntity> questions;
+    private Collection<QuestionEntity> questions;
 }

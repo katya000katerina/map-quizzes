@@ -8,7 +8,7 @@ import lombok.Getter;
 @Entity
 @Table(schema = "quizzes", name = "quizzes_questions")
 @Getter
-public class QuizQuestionEntity {
+public class QuestionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
