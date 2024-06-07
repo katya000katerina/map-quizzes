@@ -19,5 +19,5 @@ public class QuizQuestionEntity {
     @ManyToOne
     @JoinColumn(name = "quiz_id", referencedColumnName = "id")
     @NotNull
-    private QuizEntity quizEntity;
+    private QuizEntity quiz;
 }
