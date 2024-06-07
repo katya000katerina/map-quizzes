@@ -18,6 +18,6 @@ public class QuizEntity {
     @Column(name = "name")
     @NotNull @NotBlank
     private String name;
-    @OneToMany(mappedBy = "quizEntity", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "quiz", fetch = FetchType.LAZY)
     private Collection<QuizQuestionEntity> questions;
 }
