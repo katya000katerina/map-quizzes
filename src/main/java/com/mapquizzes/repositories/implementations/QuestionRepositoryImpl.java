@@ -1,8 +1,8 @@
 package com.mapquizzes.repositories.implementations;
 
+import com.mapquizzes.models.entities.QuestionEntity;
 import com.mapquizzes.models.entities.QuizEntity;
-import com.mapquizzes.models.entities.QuizQuestionEntity;
-import com.mapquizzes.repositories.interfaces.QuizQuestionRepository;
+import com.mapquizzes.repositories.interfaces.QuestionRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -14,16 +14,16 @@ import org.springframework.stereotype.Repository;
 import java.util.stream.Stream;
 
 @Repository
-public class QuizQuestionRepositoryImpl implements QuizQuestionRepository {
+public class QuestionRepositoryImpl implements QuestionRepository {
     @PersistenceContext
     EntityManager em;
 
     @Override
-    public Stream<QuizQuestionEntity> findAllByQuizId(Integer quizId) {
+    public Stream<QuestionEntity> findAllByQuizId(Integer quizId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<QuizQuestionEntity> cq = cb.createQuery(QuizQuestionEntity.class);
-        Root<QuizQuestionEntity> root = cq.from(QuizQuestionEntity.class);
-        Join<QuizQuestionEntity, QuizEntity> quizJoin = root.join("quizEntity");
+        CriteriaQuery<QuestionEntity> cq = cb.createQuery(QuestionEntity.class);
+        Root<QuestionEntity> root = cq.from(QuestionEntity.class);
+        Join<QuestionEntity, QuizEntity> quizJoin = root.join("quizEntity");
         cq.select(root).where(cb.equal(quizJoin.get("id"), quizId));
         return em.createQuery(cq).getResultList().stream();
     }
