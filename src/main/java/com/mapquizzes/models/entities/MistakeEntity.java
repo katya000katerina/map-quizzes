@@ -10,7 +10,6 @@ import lombok.Setter;
 @Table(schema = "quizzes", name = "mistakes")
 @IdClass(MistakeId.class)
 @Getter
-@Setter
 public class MistakeEntity {
     @Id
     @Column(name = "user_id")
