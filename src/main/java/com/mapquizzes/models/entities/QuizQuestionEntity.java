@@ -3,9 +3,11 @@ package com.mapquizzes.models.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 
 @Entity
 @Table(schema = "quizzes", name = "quizzes_questions")
+@Getter
 public class QuizQuestionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
