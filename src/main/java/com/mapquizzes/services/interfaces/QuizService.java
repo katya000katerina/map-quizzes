@@ -7,4 +7,6 @@ import java.util.stream.Stream;
 public interface QuizService {
 
     Stream<QuizDto> getAll();
+
+    QuizDto getById(Integer id);
 }
