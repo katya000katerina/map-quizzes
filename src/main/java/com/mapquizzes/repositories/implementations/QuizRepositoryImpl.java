@@ -9,12 +9,18 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository
 public class QuizRepositoryImpl implements QuizRepository {
     @PersistenceContext
     EntityManager em;
+
+    @Override
+    public Optional<QuizEntity> findById(Integer id) {
+        return Optional.ofNullable(em.find(QuizEntity.class, id));
+    }
 
     @Override
     public Stream<QuizEntity> findAll() {
