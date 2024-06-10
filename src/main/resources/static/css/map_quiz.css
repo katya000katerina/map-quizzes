@@ -1,0 +1,33 @@
+.map{
+    position: relative;
+    text-align: center;
+    fill: rgba(53, 194, 196, 0.6);
+    stroke: #023e3f;
+    stroke-width: 2px;
+    margin-left: 150px;
+    margin-right: 150px;
+}
+svg{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+img{
+    height: 550px;
+    width: auto;
+}
+path:hover{
+    fill: rgba(116, 85, 155, 0.63);
+    stroke: #791fda;
+    transition: 0.25s;
+    cursor: pointer;
+}
+.currentQuestion, .check{
+    color: #333333;
+    font-family: Georgia, serif;
+    font-size: 18px;
+    line-height:128px;
+    margin: 0 0 28px;
+}
