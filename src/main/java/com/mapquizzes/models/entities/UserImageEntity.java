@@ -19,5 +19,5 @@ public class UserImageEntity {
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @NotNull
-    private UserEntity userEntity;
+    private UserEntity user;
 }

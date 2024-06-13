@@ -3,16 +3,19 @@ package com.mapquizzes.models.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.OffsetDateTime;
 
 @Entity
 @Table(schema = "users", name = "users")
+@Getter
+@Setter
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @NotNull
     private Integer id;
     @Column(name = "username")
     @NotNull @NotBlank
@@ -22,7 +25,7 @@ public class UserEntity {
     private String password;
     @Column(name = "created_at")
     @NotNull
-    private OffsetDateTime offsetDateTime;
-    @OneToOne(mappedBy = "userEntity", fetch = FetchType.LAZY)
-    private UserImageEntity userImageEntity;
+    private OffsetDateTime createdAt;
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private UserImageEntity userImage;
 }
