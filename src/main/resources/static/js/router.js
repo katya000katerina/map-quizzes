@@ -14,6 +14,16 @@ const routes = {
         page: '/pages/home.html',
         title: 'Home',
     },
+    '/sign-up': {
+        page: '/pages/sign_up.html',
+        title: 'Sign up',
+        script: '/js/sign_in_up.js'
+    },
+    '/sign-in': {
+        page: '/pages/sign_in.html',
+        title: 'Sign in',
+        script: '/js/sign_in_up.js'
+    },
     '/quiz-1' :{
         page: '/pages/quiz_1.html',
         title: 'Mountains of the world',
