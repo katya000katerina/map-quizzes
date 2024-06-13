@@ -29,7 +29,3 @@
     color: black;
     display: block;
 }
-
-.wrapper .sidebar ul li:hover a{
-    background-color: rgba(148, 255, 255, 0.51);
-}
