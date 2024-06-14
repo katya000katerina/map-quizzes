@@ -1,8 +1,5 @@
-package com.mapquizzes.config;
+package com.mapquizzes.config.security;
 
-import com.mapquizzes.security.CustomAccessDeniedHandler;
-import com.mapquizzes.security.JwtAuthenticationFilter;
-import com.mapquizzes.security.JwtLogoutHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

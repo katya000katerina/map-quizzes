@@ -1,4 +1,4 @@
-package com.mapquizzes.security;
+package com.mapquizzes.config.security;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,5 +1,6 @@
-package com.mapquizzes.security;
+package com.mapquizzes.config.security;
 
+import com.mapquizzes.services.implemenations.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

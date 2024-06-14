@@ -1,5 +1,6 @@
-package com.mapquizzes.security;
+package com.mapquizzes.config.security;
 
+import com.mapquizzes.services.implemenations.TokenBlacklistService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

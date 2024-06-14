@@ -1,4 +1,4 @@
-package com.mapquizzes.security;
+package com.mapquizzes.services.implemenations;
 
 import com.mapquizzes.exceptions.EntityNotFoundException;
 import com.mapquizzes.exceptions.RefreshTokenException;
