@@ -1,6 +1,8 @@
 package com.mapquizzes.services.implemenations;
 
 import com.mapquizzes.models.entities.UserEntity;
+import com.mapquizzes.services.interfaces.JwtService;
+import com.mapquizzes.services.interfaces.TokenBlacklistService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -16,7 +18,7 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
-public class JwtService {
+public class JwtServiceImpl implements JwtService {
     private final TokenBlacklistService blacklistService;
     @Value("${map-quizzes.security.jwt.secret-key}")
     private String secretKey;
@@ -25,15 +27,17 @@ public class JwtService {
     @Value("${map-quizzes.security.jwt.refresh-token.expiration-time}")
     private long refreshTokenExpTime;
 
+    @Override
     public boolean isAccessTokenValid(String token, UserDetails user) {
         return isTokenValid(token, user) && !isAccessTokenBlacklisted(token);
     }
 
+    @Override
     public boolean isRefreshTokenValid(String token, UserDetails user) {
         return isTokenValid(token, user) && !isRefreshTokenBlacklisted(token);
     }
 
-    private boolean isTokenValid(String token, UserDetails user){
+    private boolean isTokenValid(String token, UserDetails user) {
         String username = extractUsername(token);
         return (username.equals(user.getUsername())) && !isTokenExpired(token);
     }
@@ -54,10 +58,12 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    @Override
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
+    @Override
     public <T> T extractClaim(String token, Function<Claims, T> resolver) {
         Claims claims = extractAllClaims(token);
         return resolver.apply(claims);
@@ -72,15 +78,17 @@ public class JwtService {
                 .getPayload();
     }
 
+    @Override
     public String generateAccessToken(UserEntity user) {
         return generateToken(user, accessTokenExpTime);
     }
 
+    @Override
     public String generateRefreshToken(UserEntity user) {
         return generateToken(user, refreshTokenExpTime);
     }
 
-    private String generateToken(UserEntity user, long expTime){
+    private String generateToken(UserEntity user, long expTime) {
         return Jwts
                 .builder()
                 .subject(user.getUsername())

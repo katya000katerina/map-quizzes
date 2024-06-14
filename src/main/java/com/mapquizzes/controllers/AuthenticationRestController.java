@@ -2,7 +2,7 @@ package com.mapquizzes.controllers;
 
 import com.mapquizzes.models.dto.AuthenticationDto;
 import com.mapquizzes.models.dto.UserDto;
-import com.mapquizzes.services.implemenations.AuthenticationService;
+import com.mapquizzes.services.interfaces.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

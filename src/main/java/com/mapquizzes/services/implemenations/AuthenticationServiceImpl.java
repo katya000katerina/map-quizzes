@@ -7,6 +7,8 @@ import com.mapquizzes.models.dto.UserDto;
 import com.mapquizzes.models.entities.UserEntity;
 import com.mapquizzes.models.mapping.mappers.UserMapper;
 import com.mapquizzes.repositories.interfaces.UserRepository;
+import com.mapquizzes.services.interfaces.AuthenticationService;
+import com.mapquizzes.services.interfaces.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +27,7 @@ import java.time.OffsetDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserMapper mapper;
     private final UserRepository userRepo;
     private final PasswordEncoder encoder;
@@ -36,6 +38,7 @@ public class AuthenticationService {
     @Value("${map-quizzes.security.jwt.refresh-token.expiration-time}")
     private long refreshTokenExpTime;
 
+    @Override
     @Transactional
     public AuthenticationDto signUp(UserDto userDto) {
         UserEntity userEntity = mapper.mapDtoToEntity(userDto);
@@ -48,6 +51,7 @@ public class AuthenticationService {
         return authDto;
     }
 
+    @Override
     public AuthenticationDto signIn(UserDto userDto) {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -58,6 +62,7 @@ public class AuthenticationService {
         return getAuthenticationDto(userEntity);
     }
 
+    @Override
     public AuthenticationDto refreshToken(HttpServletRequest request) {
         jakarta.servlet.http.Cookie[] cookies = request.getCookies();
         String refreshToken = null;
