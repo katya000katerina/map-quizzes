@@ -72,7 +72,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         for (jakarta.servlet.http.Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals("refresh_token")) {
+            if (cookie.getName().equals("refreshToken")) {
                 refreshToken = cookie.getValue();
             }
         }
@@ -104,8 +104,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private HttpHeaders makeTokenCookiesHeaders(String accessToken, long accessTokenExpTime,
                                                 String refreshToken, long refreshTokenExpTime) {
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.SET_COOKIE, makeCookie("access_token", accessToken, accessTokenExpTime));
-        headers.add(HttpHeaders.SET_COOKIE, makeCookie("refresh_token", refreshToken, refreshTokenExpTime));
+        headers.add(HttpHeaders.SET_COOKIE, makeCookie("accessToken", accessToken, accessTokenExpTime));
+        headers.add(HttpHeaders.SET_COOKIE, makeCookie("refreshToken", refreshToken, refreshTokenExpTime));
         return headers;
     }
 

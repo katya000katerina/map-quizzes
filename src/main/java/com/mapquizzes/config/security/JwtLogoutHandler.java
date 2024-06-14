@@ -27,10 +27,10 @@ public class JwtLogoutHandler implements LogoutHandler {
         }
 
         for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals("access_token")) {
+            if (cookie.getName().equals("accessToken")) {
                 accessToken = cookie.getValue();
             }
-            if (cookie.getName().equals("refresh_token")) {
+            if (cookie.getName().equals("refreshToken")) {
                 refreshToken = cookie.getValue();
             }
         }
