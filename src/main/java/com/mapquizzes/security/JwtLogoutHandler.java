@@ -1,6 +1,5 @@
 package com.mapquizzes.security;
 
-import com.mapquizzes.services.interfaces.TokenBlacklistService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +17,8 @@ public class JwtLogoutHandler implements LogoutHandler {
     public void logout(HttpServletRequest request,
                        HttpServletResponse response,
                        Authentication authentication) {
-        String jwtToken = null;
+        String accessToken = null;
+        String refreshToken = null;
         Cookie[] cookies = request.getCookies();
 
         if (cookies == null || cookies.length == 0) {
@@ -26,14 +26,15 @@ public class JwtLogoutHandler implements LogoutHandler {
         }
 
         for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals("token")) {
-                jwtToken = cookie.getValue();
+            if (cookie.getName().equals("access_token")) {
+                accessToken = cookie.getValue();
+            }
+            if (cookie.getName().equals("refresh_token")) {
+                refreshToken = cookie.getValue();
             }
         }
 
-        if (jwtToken == null) {
-            return;
-        }
-        blacklistService.blacklistToken(jwtToken);
+        blacklistService.blacklistAccessToken(accessToken);
+        blacklistService.blacklistRefreshToken(refreshToken);
     }
 }

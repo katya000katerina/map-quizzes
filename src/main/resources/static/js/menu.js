@@ -1,4 +1,6 @@
-fetch("/api/v1/users/current")
+import {fetchWithAuth} from './refresh_token.js';
+
+fetchWithAuth("/api/v1/users/current")
     .then(response => makeUserMenu(response));
 
 fetch('/api/v1/quizzes')
@@ -36,9 +38,9 @@ function makeUserMenu(response) {
             makeLink(submenu, key, value, value.substring(1, value.length));
         }
         document.getElementById('logout').onclick = function () {
-            fetch('/api/v1/auth/logout')
+            fetchWithAuth("/api/v1/auth/logout")
                 .then(response => {
-                    if (response.ok){
+                    if (response.ok) {
                         window.location.href = "/";
                     }
                 });

@@ -14,9 +14,12 @@ import java.time.Duration;
 @Configuration
 @PropertySource("classpath:application.yml")
 public class CacheConfig {
-    public final static String TOKEN_BLACKLIST_CACHE_NAME = "tokenBlacklist";
-    @Value("${map-quizzes.security.jwt.expiration-time}")
-    private long expirationTime;
+    public final static String ACCESS_TOKEN_BLACKLIST_CACHE_NAME = "accessTokenBlacklist";
+    public final static String REFRESH_TOKEN_BLACKLIST_CACHE_NAME = "refreshTokenBlacklist";
+    @Value("${map-quizzes.security.jwt.access-token.expiration-time}")
+    private long accessTokenExpTime;
+    @Value("${map-quizzes.security.jwt.refresh-token.expiration-time}")
+    private long refreshTokenExpTime;
     @Value("${spring.data.redis.host}")
     private String redisHost;
 
@@ -31,8 +34,11 @@ public class CacheConfig {
     @Bean
     public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
         return builder -> builder
-                .withCacheConfiguration(TOKEN_BLACKLIST_CACHE_NAME,
+                .withCacheConfiguration(ACCESS_TOKEN_BLACKLIST_CACHE_NAME,
                         RedisCacheConfiguration.defaultCacheConfig()
-                                .entryTtl(Duration.ofMillis(expirationTime)));
+                                .entryTtl(Duration.ofMillis(accessTokenExpTime)))
+                .withCacheConfiguration(REFRESH_TOKEN_BLACKLIST_CACHE_NAME,
+                        RedisCacheConfiguration.defaultCacheConfig()
+                                .entryTtl(Duration.ofMillis(refreshTokenExpTime)));
     }
 }

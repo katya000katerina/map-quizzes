@@ -22,4 +22,7 @@ map-quizzes:
   security:
     jwt:
       secret-key: f5f3423db4167c54c36561d3a15913945c149e9e4c8edba6c6f4498a4103dd8e
-      expiration-time: 600000
+      access-token:
+        expiration-time: 900000
+      refresh-token:
+        expiration-time: 604800000

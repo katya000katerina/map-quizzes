@@ -1,16 +1,22 @@
 package com.mapquizzes.security;
 
+import com.mapquizzes.exceptions.EntityNotFoundException;
+import com.mapquizzes.exceptions.RefreshTokenException;
 import com.mapquizzes.models.dto.AuthenticationDto;
 import com.mapquizzes.models.dto.UserDto;
 import com.mapquizzes.models.entities.UserEntity;
 import com.mapquizzes.models.mapping.mappers.UserMapper;
 import com.mapquizzes.repositories.interfaces.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.server.Cookie;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,18 +31,21 @@ public class AuthenticationService {
     private final PasswordEncoder encoder;
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
-    @Value("${map-quizzes.security.jwt.expiration-time}")
-    private long expirationTime;
+    @Value("${map-quizzes.security.jwt.access-token.expiration-time}")
+    private long accessTokenExpTime;
+    @Value("${map-quizzes.security.jwt.refresh-token.expiration-time}")
+    private long refreshTokenExpTime;
 
     @Transactional
     public AuthenticationDto signUp(UserDto userDto) {
-        UserEntity entity = mapper.mapDtoToEntity(userDto);
-        entity.setCreatedAt(OffsetDateTime.now());
-        entity.setPassword(encoder.encode(entity.getPassword()));
-        userRepo.save(entity);
-        userDto = mapper.mapEntityToDto(entity);
-        String token = jwtService.generateToken(entity);
-        return new AuthenticationDto(userDto, makeCookie(token));
+        UserEntity userEntity = mapper.mapDtoToEntity(userDto);
+        userEntity.setCreatedAt(OffsetDateTime.now());
+        userEntity.setPassword(encoder.encode(userEntity.getPassword()));
+        userRepo.save(userEntity);
+        userDto = mapper.mapEntityToDto(userEntity);
+        AuthenticationDto authDto = getAuthenticationDto(userEntity);
+        authDto.setUserDto(userDto);
+        return authDto;
     }
 
     public AuthenticationDto signIn(UserDto userDto) {
@@ -46,18 +55,64 @@ public class AuthenticationService {
                 )
         );
         UserEntity userEntity = userRepo.findByUsername(userDto.getUsername()).orElseThrow();
-        String token = jwtService.generateToken(userEntity);
-        return new AuthenticationDto(makeCookie(token));
+        return getAuthenticationDto(userEntity);
     }
 
-    private ResponseCookie makeCookie(String token) {
-        return ResponseCookie.from("token")
+    public AuthenticationDto refreshToken(HttpServletRequest request) {
+        jakarta.servlet.http.Cookie[] cookies = request.getCookies();
+        String refreshToken = null;
+
+        if (cookies == null || cookies.length == 0) {
+            throw new RefreshTokenException("Refresh token was not received");
+        }
+
+        for (jakarta.servlet.http.Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals("refresh_token")) {
+                refreshToken = cookie.getValue();
+            }
+        }
+
+        if (refreshToken == null){
+            throw new RefreshTokenException("Refresh token is null");
+        }
+
+        String username = jwtService.extractUsername(refreshToken);
+        UserEntity userEntity = userRepo.findByUsername(username).orElseThrow(EntityNotFoundException::new);
+        UserDetails userDetails = User.builder().username(username).password(userEntity.getPassword()).build();
+
+        if (jwtService.isRefreshTokenValid(refreshToken, userDetails)) {
+            return getAuthenticationDto(userEntity);
+        } else throw new RefreshTokenException("Refresh token is not valid");
+    }
+
+    private AuthenticationDto getAuthenticationDto(UserEntity userEntity) {
+        String accessToken = jwtService.generateAccessToken(userEntity);
+        String refreshToken = jwtService.generateRefreshToken(userEntity);
+        return new AuthenticationDto(
+                makeTokenCookiesHeaders(
+                        accessToken, accessTokenExpTime,
+                        refreshToken, refreshTokenExpTime
+                )
+        );
+    }
+
+    private HttpHeaders makeTokenCookiesHeaders(String accessToken, long accessTokenExpTime,
+                                                String refreshToken, long refreshTokenExpTime) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.SET_COOKIE, makeCookie("access_token", accessToken, accessTokenExpTime));
+        headers.add(HttpHeaders.SET_COOKIE, makeCookie("refresh_token", refreshToken, refreshTokenExpTime));
+        return headers;
+    }
+
+    private String makeCookie(String name, String token, long expTime) {
+        return ResponseCookie.from(name)
                 .value(token)
-                .maxAge(expirationTime / 1000)
+                .maxAge(expTime / 1000)
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
                 .sameSite(Cookie.SameSite.STRICT.toString())
-                .build();
+                .build()
+                .toString();
     }
 }

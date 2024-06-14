@@ -1,16 +1,16 @@
 package com.mapquizzes.models.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.ResponseCookie;
+import lombok.Setter;
+import org.springframework.http.HttpHeaders;
 
-@AllArgsConstructor
 @Getter
+@Setter
 public class AuthenticationDto {
     private UserDto userDto;
-    private ResponseCookie cookie;
+    private HttpHeaders tokenCookiesHeaders;
 
-    public AuthenticationDto(ResponseCookie cookie) {
-        this.cookie = cookie;
+    public AuthenticationDto(HttpHeaders tokenCookieHeaders) {
+        this.tokenCookiesHeaders = tokenCookieHeaders;
     }
 }

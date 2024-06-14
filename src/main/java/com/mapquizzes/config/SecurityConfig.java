@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 new RegexRequestMatcher("^(?!/api/v1/).*", HttpMethod.GET.toString())
                         ).permitAll()
-                        .requestMatchers("/api/v1/auth/sign-up", "/api/v1/auth/sign-in").anonymous()
+                        .requestMatchers("/api/v1/auth/**").anonymous()
                         .requestMatchers("/", "/api/v1/quizzes/**", "/api/v1/quizzes-questions/**").permitAll()
                         .anyRequest().authenticated())
                 .userDetailsService(userDetailsService)

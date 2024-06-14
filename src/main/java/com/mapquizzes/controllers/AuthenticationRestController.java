@@ -3,9 +3,9 @@ package com.mapquizzes.controllers;
 import com.mapquizzes.models.dto.AuthenticationDto;
 import com.mapquizzes.models.dto.UserDto;
 import com.mapquizzes.security.AuthenticationService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +24,7 @@ public class AuthenticationRestController {
         AuthenticationDto authDto = authService.signUp(userDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .header(HttpHeaders.SET_COOKIE, authDto.getCookie().toString())
+                .headers(authDto.getTokenCookiesHeaders())
                 .body(authDto.getUserDto());
     }
 
@@ -33,7 +33,16 @@ public class AuthenticationRestController {
         AuthenticationDto authDto = authService.signIn(userDto);
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.SET_COOKIE, authDto.getCookie().toString())
+                .headers(authDto.getTokenCookiesHeaders())
+                .build();
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<Void> refreshToken(HttpServletRequest request) {
+        AuthenticationDto authDto = authService.refreshToken(request);
+        return ResponseEntity
+                .ok()
+                .headers(authDto.getTokenCookiesHeaders())
                 .build();
     }
 }
