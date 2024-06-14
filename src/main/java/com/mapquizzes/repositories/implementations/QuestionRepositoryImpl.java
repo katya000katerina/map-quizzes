@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 @Repository
 public class QuestionRepositoryImpl implements QuestionRepository {
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     @Override
     public Stream<QuestionEntity> findAllByQuizId(Integer quizId) {

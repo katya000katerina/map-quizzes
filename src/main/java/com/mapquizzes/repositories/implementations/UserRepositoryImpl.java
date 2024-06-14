@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     @Override
     public Optional<UserEntity> findByUsername(String username) {

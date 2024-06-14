@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 @Repository
 public class QuizRepositoryImpl implements QuizRepository {
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     @Override
     public Optional<QuizEntity> findById(Integer id) {
