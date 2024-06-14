@@ -1,4 +1,4 @@
-package com.mapquizzes.exceptions;
+package com.mapquizzes.exceptions.custom;
 
 public class EntityNotFoundException extends RuntimeException {
     public EntityNotFoundException() {
