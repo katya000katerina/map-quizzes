@@ -42,6 +42,7 @@ const locationHandler = async () => {
     document.title = route.title;
     if (route.script != null) {
         const script = document.createElement('script');
+        script.type = 'module';
         script.src = route.script;
         const element = document.getElementsByTagName('script')[0];
         element.parentNode.insertBefore(script, element);
