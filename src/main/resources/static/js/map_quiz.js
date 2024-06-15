@@ -1,3 +1,5 @@
+import {fetchWithAuth} from "./refresh_token.js";
+
 let questions = [];
 let url = window.location.pathname;
 let quizId = url.substring(url.length - 1);
@@ -8,6 +10,7 @@ let numberOfQuestions = 0;
 let wasWrongAnswer = false; //whether there were wrong answers to the current question
 let randomNumber;
 let start = new Date();
+let isUserAuth = false;
 
 uploadMap();
 
@@ -21,6 +24,9 @@ fetch('/api/v1/quizzes-questions/' + quizId)
         numberOfQuestions = questions.length;
         changeQuestion();
     });
+
+fetchWithAuth("/api/v1/users/current")
+    .then(response => isUserAuth = response.ok);
 
 function addOnClick() {
     let elements = document.getElementsByClassName('question')
@@ -81,6 +87,9 @@ function getQuizCompletedMessage(firstTryAnswersCount) {
     let millis = timeInMillis % 1000;
     let seconds = ((timeInMillis - millis) % 60000) / 1000;
     let minutes = (timeInMillis - timeInMillis % 60000) / 60000;
+    if (isUserAuth){
+        updateTime(timeInMillis);
+    }
     return "You scored " + firstTryAnswersCount
         + " out of " + numberOfQuestions + ". Time: " + minutes + " min " + seconds + " sec " + millis + " ms";
 }
@@ -88,6 +97,9 @@ function getQuizCompletedMessage(firstTryAnswersCount) {
 function checkAnswer(answer) {
     if (questions[randomNumber].question === answer) {
         if (wasWrongAnswer) {
+            if (isUserAuth){
+                updateMistakes();
+            }
             ++notFirstTryAnswersCount;
             wasWrongAnswer = false;
         }
@@ -109,6 +121,32 @@ function checkAnswer(answer) {
         }
         return "You are wrong. Try again!";
     }
+}
+
+function updateMistakes(){
+    const path = '/api/v1/mistakes/' + questions[randomNumber].id;
+    const mistake = {numberOfMistakes : mistakesCount};
+    const requestInit = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(mistake)
+    };
+    fetchWithAuth(path, requestInit);
+}
+
+function updateTime(millis){
+    const path = '/api/v1/fastest-time/' + quizId;
+    const time = {timeInMillis : millis};
+    const requestInit = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(time)
+    }
+    fetchWithAuth(path, requestInit);
 }
 
 
