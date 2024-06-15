@@ -9,6 +9,7 @@ import com.mapquizzes.services.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @Service
@@ -23,5 +24,10 @@ public class UserServiceImpl implements UserService {
         if (optional.isPresent()) {
             return mapper.mapEntityToDto(optional.get());
         } else throw new EntityNotFoundException(String.format("User with username \"%s\" not found", username));
+    }
+
+    @Override
+    public Integer getPrincipalId(Principal principal) {
+        return getByUsername(principal.getName()).getId();
     }
 }
