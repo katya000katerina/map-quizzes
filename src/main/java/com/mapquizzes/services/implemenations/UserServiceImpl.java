@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,15 +18,15 @@ public class UserServiceImpl implements UserService {
     private final UserMapper mapper;
 
     @Override
-    public UserDto getByUsername(String username) {
-        Optional<UserEntity> optional = userRepo.findByUsername(username);
-        if (optional.isPresent()) {
-            return mapper.mapEntityToDto(optional.get());
-        } else throw new EntityNotFoundException(String.format("User with username \"%s\" not found", username));
+    public UserDto getDtoByPrincipal(Principal principal) {
+        return mapper.mapEntityToDto(getEntityByPrincipal(principal));
     }
 
     @Override
-    public Integer getPrincipalId(Principal principal) {
-        return getByUsername(principal.getName()).getId();
+    public UserEntity getEntityByPrincipal(Principal principal) {
+        String username = principal.getName();
+        return userRepo.findByUsername(username).orElseThrow(() -> {
+            throw new EntityNotFoundException(String.format("User with username\"%s\" was not found", username));
+        });
     }
 }
