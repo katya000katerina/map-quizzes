@@ -1,12 +1,13 @@
 package com.mapquizzes.services.interfaces;
 
 import com.mapquizzes.models.dto.QuizDto;
+import com.mapquizzes.models.entities.QuizEntity;
 
 import java.util.stream.Stream;
 
 public interface QuizService {
 
-    Stream<QuizDto> getAll();
+    Stream<QuizDto> getAllDto();
 
-    QuizDto getById(Integer id);
+    QuizEntity getEntityById(Integer id);
 }

@@ -23,7 +23,7 @@ public class QuizRestController {
     @JsonView(QuizViews.WithoutQuestions.class)
     @GetMapping
     public ResponseEntity<List<QuizDto>> getAll() {
-        return ResponseEntity.ok(service.getAll().collect(Collectors.toList()));
+        return ResponseEntity.ok(service.getAllDto().collect(Collectors.toList()));
     }
 
 

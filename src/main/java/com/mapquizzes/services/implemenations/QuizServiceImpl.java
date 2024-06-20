@@ -21,18 +21,17 @@ public class QuizServiceImpl implements QuizService {
     private final QuizMapper mapper;
 
     @Override
-    public QuizDto getById(Integer id) {
+    public QuizEntity getEntityById(Integer id) {
         if (id == null) {
             throw new NullIdException("Quiz id is null");
         }
-        Optional<QuizEntity> entity = quizRepo.findById(id);
-        if (entity.isPresent()) {
-            return mapper.mapEntityToDto(entity.get());
-        } else throw new EntityNotFoundException(String.format("Quiz entity with id %d not found", id));
+        return quizRepo.findById(id).orElseThrow(() -> {
+            throw new EntityNotFoundException(String.format("Quiz with id=%d was not found", id));
+        });
     }
 
     @Override
-    public Stream<QuizDto> getAll() {
+    public Stream<QuizDto> getAllDto() {
         return quizRepo.findAll().map(mapper::mapEntityToDto).sorted(Comparator.comparing(QuizDto::getId));
     }
 }
