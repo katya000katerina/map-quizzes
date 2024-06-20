@@ -17,7 +17,9 @@ public class CacheConfig {
     public final static String ACCESS_TOKEN_BLACKLIST_CACHE_NAME = "accessTokenBlacklist";
     public final static String REFRESH_TOKEN_BLACKLIST_CACHE_NAME = "refreshTokenBlacklist";
     public final static String USER_CACHE_NAME = "userCache";
+    public final static String QUIZ_QUESTION_CACHE_NAME = "quizQuestionsCache";
     public final static String QUIZ_CACHE_NAME = "quizCache";
+    public final static String QUESTION_CACHE_NAME = "questionCache";
     @Value("${map-quizzes.security.jwt.access-token.expiration-time}")
     private long accessTokenExpTime;
     @Value("${map-quizzes.security.jwt.refresh-token.expiration-time}")
@@ -43,6 +45,12 @@ public class CacheConfig {
                         RedisCacheConfiguration.defaultCacheConfig()
                                 .entryTtl(Duration.ofMillis(refreshTokenExpTime)))
                 .withCacheConfiguration(USER_CACHE_NAME,
+                        RedisCacheConfiguration.defaultCacheConfig()
+                                .entryTtl(Duration.ofDays(1)))
+                .withCacheConfiguration(QUIZ_QUESTION_CACHE_NAME,
+                        RedisCacheConfiguration.defaultCacheConfig()
+                                .entryTtl(Duration.ofDays(1)))
+                .withCacheConfiguration(QUESTION_CACHE_NAME,
                         RedisCacheConfiguration.defaultCacheConfig()
                                 .entryTtl(Duration.ofDays(1)))
                 .withCacheConfiguration(QUIZ_CACHE_NAME,
