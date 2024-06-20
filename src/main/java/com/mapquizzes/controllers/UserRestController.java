@@ -17,7 +17,7 @@ public class UserRestController {
     private final UserService service;
 
     @GetMapping("/current")
-    public ResponseEntity<UserDto> getSignedInUser(Principal user) {
-        return ResponseEntity.ok(service.getByUsername(user.getName()));
+    public ResponseEntity<UserDto> getSignedInUser(Principal principal) {
+        return ResponseEntity.ok(service.getDtoByPrincipal(principal));
     }
 }
