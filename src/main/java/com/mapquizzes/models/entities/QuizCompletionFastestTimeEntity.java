@@ -14,11 +14,11 @@ import lombok.NoArgsConstructor;
 @IdClass(QuizCompletionFastestTimeId.class)
 public class QuizCompletionFastestTimeEntity {
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "quiz_id", referencedColumnName = "id")
     private QuizEntity quiz;
     @Column(name = "time_millis")
