@@ -8,7 +8,6 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -31,5 +30,10 @@ public class UserRepositoryImpl implements UserRepository {
         em.persist(entity);
         em.flush();
         return Optional.of(entity);
+    }
+
+    @Override
+    public Optional<UserEntity> findById(Integer userId) {
+        return Optional.ofNullable(em.find(UserEntity.class, userId));
     }
 }

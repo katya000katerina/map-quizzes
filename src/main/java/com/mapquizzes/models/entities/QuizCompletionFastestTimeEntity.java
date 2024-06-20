@@ -13,14 +13,15 @@ import lombok.Setter;
 @Setter
 public class QuizCompletionFastestTimeEntity {
     @Id
-    @Column(name = "user_id")
-    @NotNull
-    private Integer userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity user;
     @Id
-    @Column(name = "quiz_id")
-    @NotNull
-    private Integer quizId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "quiz_id", referencedColumnName = "id")
+    private QuizEntity quiz;
     @Column(name = "time_millis")
     @NotNull
     private Integer timeInMillis;
+
 }

@@ -1,6 +1,7 @@
 package com.mapquizzes.repositories.implementations;
 
 import com.mapquizzes.models.entities.QuizCompletionFastestTimeEntity;
+import com.mapquizzes.models.entities.UserEntity;
 import com.mapquizzes.repositories.interfaces.QuizCompletionFastestTimeRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -23,11 +24,11 @@ public class QuizCompletionFastestTimeRepositoryImpl implements QuizCompletionFa
     }
 
     @Override
-    public Optional<QuizCompletionFastestTimeEntity> getByUserId(Integer userId) {
+    public Optional<QuizCompletionFastestTimeEntity> getByUser(UserEntity userEntity) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<QuizCompletionFastestTimeEntity> cq = cb.createQuery(QuizCompletionFastestTimeEntity.class);
         Root<QuizCompletionFastestTimeEntity> root = cq.from(QuizCompletionFastestTimeEntity.class);
-        cq.select(root).where(cb.equal(root.get("userId"), userId));
+        cq.select(root).where(cb.equal(root.get("user"), userEntity));
         return em.createQuery(cq).getResultStream().findFirst();
     }
 }

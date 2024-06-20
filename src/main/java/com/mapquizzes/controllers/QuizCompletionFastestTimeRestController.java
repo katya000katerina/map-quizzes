@@ -23,9 +23,7 @@ public class QuizCompletionFastestTimeRestController {
                                              @Valid @RequestBody QuizCompletionFastestTimeDto dto,
                                              Principal principal) {
         Integer userId = userService.getPrincipalId(principal);
-        dto.setUserId(userId);
-        dto.setQuizId(quizId);
-        fastestTimeService.saveOrUpdate(dto);
+        fastestTimeService.saveOrUpdate(dto, userId, quizId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

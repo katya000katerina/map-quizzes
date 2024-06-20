@@ -9,4 +9,6 @@ public interface UserRepository {
     Optional<UserEntity> findByUsername(String username);
 
     Optional<UserEntity> save(UserEntity userEntity);
+
+    Optional<UserEntity> findById(Integer userId);
 }

@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class QuizCompletionFastestTimeDto {
-    private Integer userId;
-    private Integer quizId;
+    private UserDto user;
+    private QuizDto quiz;
     @NotNull
     private Integer timeInMillis;
 }
