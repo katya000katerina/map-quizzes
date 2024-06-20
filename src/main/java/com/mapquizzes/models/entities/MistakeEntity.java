@@ -2,8 +2,9 @@ package com.mapquizzes.models.entities;
 
 import com.mapquizzes.models.entities.compositekeys.MistakeId;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
@@ -14,14 +15,13 @@ import lombok.*;
 @IdClass(MistakeId.class)
 public class MistakeEntity {
     @Id
-    @Column(name = "user_id")
-    @NotNull
-    private Integer userId;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity user;
     @Id
-    @Column(name = "question_id")
-    @NotNull
-    private Integer questionId;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "question_id", referencedColumnName = "id")
+    private QuestionEntity question;
     @Column(name = "number_of_mistakes")
-    @NotNull
     private Integer numberOfMistakes;
 }

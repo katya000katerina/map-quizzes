@@ -7,8 +7,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MistakeDto {
-    private Integer userId;
-    private Integer questionId;
+    private UserDto user;
+    private QuestionDto question;
     @NotNull
     private Integer numberOfMistakes;
 }
