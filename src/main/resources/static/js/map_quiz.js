@@ -1,4 +1,4 @@
-import {fetchWithAuth} from "./refresh_token.js";
+import {fetchWithAuth} from './refresh_token.js';
 
 let questions = [];
 let url = window.location.pathname;
@@ -25,7 +25,7 @@ fetch('/api/v1/quizzes-questions/' + quizId)
         changeQuestion();
     });
 
-fetchWithAuth("/api/v1/users/current")
+fetchWithAuth('/api/v1/users/current')
     .then(response => isUserAuth = response.ok);
 
 function addOnClick() {
@@ -90,8 +90,8 @@ function getQuizCompletedMessage(firstTryAnswersCount) {
     if (isUserAuth){
         updateTime(timeInMillis);
     }
-    return "You scored " + firstTryAnswersCount
-        + " out of " + numberOfQuestions + ". Time: " + minutes + " min " + seconds + " sec " + millis + " ms";
+    return 'You scored ' + firstTryAnswersCount
+        + ' out of ' + numberOfQuestions + '. Time: ' + minutes + ' min ' + seconds + ' sec ' + millis + ' ms';
 }
 
 function checkAnswer(answer) {
@@ -108,7 +108,7 @@ function checkAnswer(answer) {
         removeQuestion(answer);
         if (questions.length !== 0) {
             changeQuestion();
-            return "You are right! Where is it located?";
+            return 'You are right! Where is it located?';
         } else {
             let firstTryAnswersCount = numberOfQuestions - notFirstTryAnswersCount;
             return getQuizCompletedMessage(firstTryAnswersCount);
@@ -119,7 +119,7 @@ function checkAnswer(answer) {
         if (mistakesCount > 7) {
             help(questions[randomNumber].question);
         }
-        return "You are wrong. Try again!";
+        return 'You are wrong. Try again!';
     }
 }
 
