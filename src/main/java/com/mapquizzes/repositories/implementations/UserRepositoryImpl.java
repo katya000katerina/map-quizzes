@@ -19,6 +19,7 @@ public class UserRepositoryImpl implements UserRepository {
     private EntityManager em;
 
     @Override
+    @Cacheable(value = CacheConfig.USER_CACHE_NAME, unless = "#result == null")
     public Optional<UserEntity> findByUsername(String username) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<UserEntity> cq = cb.createQuery(UserEntity.class);
