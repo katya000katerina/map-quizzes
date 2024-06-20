@@ -1,23 +1,24 @@
 package com.mapquizzes.models.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.Collection;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(schema = "quizzes", name = "quizzes")
-@Getter
 public class QuizEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
     @Column(name = "name")
-    @NotNull @NotBlank
     private String name;
     @OneToMany(mappedBy = "quiz", fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Collection<QuestionEntity> questions;
 }

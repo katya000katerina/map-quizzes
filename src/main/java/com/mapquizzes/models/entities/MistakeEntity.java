@@ -3,14 +3,15 @@ package com.mapquizzes.models.entities;
 import com.mapquizzes.models.entities.compositekeys.MistakeId;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(schema = "quizzes", name = "mistakes")
 @IdClass(MistakeId.class)
-@Getter
-@Setter
 public class MistakeEntity {
     @Id
     @Column(name = "user_id")

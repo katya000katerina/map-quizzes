@@ -2,15 +2,16 @@ package com.mapquizzes.models.entities;
 
 import com.mapquizzes.models.entities.compositekeys.QuizCompletionFastestTimeId;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(schema = "quizzes", name = "quizzes_completion_fastest_time")
 @IdClass(QuizCompletionFastestTimeId.class)
-@Getter
-@Setter
 public class QuizCompletionFastestTimeEntity {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
@@ -21,7 +22,6 @@ public class QuizCompletionFastestTimeEntity {
     @JoinColumn(name = "quiz_id", referencedColumnName = "id")
     private QuizEntity quiz;
     @Column(name = "time_millis")
-    @NotNull
     private Integer timeInMillis;
 
 }

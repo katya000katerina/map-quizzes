@@ -1,11 +1,11 @@
 package com.mapquizzes.models.dto;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MistakeDto {
     private Integer userId;
     private Integer questionId;

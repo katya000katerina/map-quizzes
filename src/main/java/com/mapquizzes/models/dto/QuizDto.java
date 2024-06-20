@@ -4,12 +4,12 @@ package com.mapquizzes.models.dto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mapquizzes.models.dto.views.QuizViews;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.Collection;
 
-@Getter
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class QuizDto {
     @JsonView(QuizViews.WithoutQuestions.class)
@@ -18,5 +18,7 @@ public class QuizDto {
     private String name;
     @JsonView(QuizViews.WithQuestions.class)
     @JsonManagedReference
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Collection<QuestionDto> questions;
 }
