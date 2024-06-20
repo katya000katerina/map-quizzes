@@ -6,12 +6,13 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.mapquizzes.models.dto.views.QuizViews;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuizDto {
+public class QuizDto implements Serializable {
     @JsonView(QuizViews.WithoutQuestions.class)
     private Integer id;
     @JsonView(QuizViews.WithoutQuestions.class)

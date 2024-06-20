@@ -3,6 +3,7 @@ package com.mapquizzes.models.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 @Data
@@ -10,7 +11,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @Entity
 @Table(schema = "quizzes", name = "quizzes")
-public class QuizEntity {
+public class QuizEntity  implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

@@ -3,6 +3,7 @@ package com.mapquizzes.models.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.OffsetDateTime;
 
 @Data
@@ -10,7 +11,7 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 @Entity
 @Table(schema = "users", name = "users")
-public class UserEntity {
+public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
