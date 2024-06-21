@@ -1,4 +1,4 @@
-package com.mapquizzes.repositories.implementations;
+package com.mapquizzes.services.implementations;
 
 import com.mapquizzes.models.entities.MistakeEntity;
 import com.mapquizzes.models.entities.compositekeys.MistakeId;

@@ -6,7 +6,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuizCompletionFastestTimeDto {
+public class FastestTimeDto {
     private UserDto user;
     private QuizDto quiz;
     @NotNull

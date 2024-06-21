@@ -1,8 +1,8 @@
-package com.mapquizzes.repositories.implementations;
+package com.mapquizzes.services.implementations;
 
-import com.mapquizzes.models.entities.QuizCompletionFastestTimeEntity;
+import com.mapquizzes.models.entities.FastestTimeEntity;
 import com.mapquizzes.models.entities.UserEntity;
-import com.mapquizzes.repositories.interfaces.QuizCompletionFastestTimeRepository;
+import com.mapquizzes.repositories.interfaces.FastestTimeRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -13,21 +13,21 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class QuizCompletionFastestTimeRepositoryImpl implements QuizCompletionFastestTimeRepository {
+public class FastestTimeRepositoryImpl implements FastestTimeRepository {
     @PersistenceContext
     private EntityManager em;
 
     @Override
-    public void saveOrUpdate(QuizCompletionFastestTimeEntity entity) {
+    public void saveOrUpdate(FastestTimeEntity entity) {
         em.merge(entity);
         em.flush();
     }
 
     @Override
-    public Optional<QuizCompletionFastestTimeEntity> getByUser(UserEntity userEntity) {
+    public Optional<FastestTimeEntity> getByUser(UserEntity userEntity) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<QuizCompletionFastestTimeEntity> cq = cb.createQuery(QuizCompletionFastestTimeEntity.class);
-        Root<QuizCompletionFastestTimeEntity> root = cq.from(QuizCompletionFastestTimeEntity.class);
+        CriteriaQuery<FastestTimeEntity> cq = cb.createQuery(FastestTimeEntity.class);
+        Root<FastestTimeEntity> root = cq.from(FastestTimeEntity.class);
         cq.select(root).where(cb.equal(root.get("user"), userEntity));
         return em.createQuery(cq).getResultStream().findFirst();
     }

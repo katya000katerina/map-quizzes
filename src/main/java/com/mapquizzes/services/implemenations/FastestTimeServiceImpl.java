@@ -2,13 +2,13 @@ package com.mapquizzes.services.implemenations;
 
 import com.mapquizzes.exceptions.custom.NullDtoException;
 import com.mapquizzes.exceptions.custom.NullIdException;
-import com.mapquizzes.models.dto.QuizCompletionFastestTimeDto;
-import com.mapquizzes.models.entities.QuizCompletionFastestTimeEntity;
+import com.mapquizzes.models.dto.FastestTimeDto;
+import com.mapquizzes.models.entities.FastestTimeEntity;
 import com.mapquizzes.models.entities.QuizEntity;
 import com.mapquizzes.models.entities.UserEntity;
-import com.mapquizzes.models.mapping.mappers.QuizCompletionFastestTimeMapper;
-import com.mapquizzes.repositories.interfaces.QuizCompletionFastestTimeRepository;
-import com.mapquizzes.services.interfaces.QuizCompletionFastestTimeService;
+import com.mapquizzes.models.mapping.mappers.FastestTimeMapper;
+import com.mapquizzes.repositories.interfaces.FastestTimeRepository;
+import com.mapquizzes.services.interfaces.FastestTimeService;
 import com.mapquizzes.services.interfaces.QuizService;
 import com.mapquizzes.services.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +20,15 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class QuizCompletionFastestTimeServiceImpl implements QuizCompletionFastestTimeService {
-    private final QuizCompletionFastestTimeRepository fastestTimeRepo;
+public class FastestTimeServiceImpl implements FastestTimeService {
+    private final FastestTimeRepository fastestTimeRepo;
     private final UserService userService;
     private final QuizService quizService;
-    private final QuizCompletionFastestTimeMapper mapper;
+    private final FastestTimeMapper mapper;
 
     @Override
     @Transactional
-    public void saveOrUpdate(QuizCompletionFastestTimeDto dto, Principal principal, Integer quizId) {
+    public void saveOrUpdate(FastestTimeDto dto, Principal principal, Integer quizId) {
         if (dto == null) {
             throw new NullDtoException("MistakeDto is null");
         }
@@ -40,10 +40,10 @@ public class QuizCompletionFastestTimeServiceImpl implements QuizCompletionFaste
         }
 
         UserEntity userEntity = userService.getEntityByPrincipal(principal);
-        Optional<QuizCompletionFastestTimeEntity> currEntityOp = fastestTimeRepo.getByUser(userEntity);
+        Optional<FastestTimeEntity> currEntityOp = fastestTimeRepo.getByUser(userEntity);
 
         if (currEntityOp.isEmpty() || currEntityOp.get().getTimeInMillis() > dto.getTimeInMillis()) {
-            QuizCompletionFastestTimeEntity entity = mapper.mapDtoToEntity(dto);
+            FastestTimeEntity entity = mapper.mapDtoToEntity(dto);
             QuizEntity quizEntity = quizService.getEntityById(quizId);
             entity.setUser(userEntity);
             entity.setQuiz(quizEntity);

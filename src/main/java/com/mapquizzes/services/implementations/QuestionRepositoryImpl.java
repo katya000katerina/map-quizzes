@@ -1,4 +1,4 @@
-package com.mapquizzes.repositories.implementations;
+package com.mapquizzes.services.implementations;
 
 import com.mapquizzes.config.CacheConfig;
 import com.mapquizzes.models.entities.QuestionEntity;

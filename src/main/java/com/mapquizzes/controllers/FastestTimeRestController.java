@@ -1,7 +1,7 @@
 package com.mapquizzes.controllers;
 
-import com.mapquizzes.models.dto.QuizCompletionFastestTimeDto;
-import com.mapquizzes.services.interfaces.QuizCompletionFastestTimeService;
+import com.mapquizzes.models.dto.FastestTimeDto;
+import com.mapquizzes.services.interfaces.FastestTimeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,12 +13,12 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/v1/fastest-time")
 @RequiredArgsConstructor
-public class QuizCompletionFastestTimeRestController {
-    private final QuizCompletionFastestTimeService fastestTimeService;
+public class FastestTimeRestController {
+    private final FastestTimeService fastestTimeService;
 
     @PutMapping("/{quizId}")
     public ResponseEntity<Void> saveOrUpdate(@PathVariable Integer quizId,
-                                             @Valid @RequestBody QuizCompletionFastestTimeDto dto,
+                                             @Valid @RequestBody FastestTimeDto dto,
                                              Principal principal) {
         fastestTimeService.saveOrUpdate(dto, principal, quizId);
         return ResponseEntity.status(HttpStatus.OK).build();

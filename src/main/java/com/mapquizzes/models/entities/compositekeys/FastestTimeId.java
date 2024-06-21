@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serializable;
 
 @EqualsAndHashCode
-public class QuizCompletionFastestTimeId implements Serializable {
+public class FastestTimeId implements Serializable {
     private UserEntity user;
     private QuizEntity quiz;
 }
