@@ -10,4 +10,6 @@ public interface QuizService {
     Stream<QuizDto> getAllDto();
 
     QuizEntity getEntityById(Integer id);
+
+    QuizDto getDtoById(Integer id);
 }

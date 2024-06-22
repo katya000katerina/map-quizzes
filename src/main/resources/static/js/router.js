@@ -28,6 +28,11 @@ const routes = {
         page: '/pages/quiz_1.html',
         title: 'Mountains of the world',
         script: '/js/map_quiz.js'
+    },
+    '/ranking' :{
+        page: '/pages/ranking.html',
+        title: 'ranking',
+        script: '/js/ranking.js'
     }
 };
 

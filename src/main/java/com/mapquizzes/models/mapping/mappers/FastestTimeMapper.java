@@ -6,6 +6,7 @@ import com.mapquizzes.models.mapping.CycleAvoidingContext;
 import com.mapquizzes.models.mapping.MapstructIgnore;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper
 public interface FastestTimeMapper {
@@ -23,4 +24,6 @@ public interface FastestTimeMapper {
     FastestTimeEntity mapDtoToEntity(FastestTimeDto dto, @Context CycleAvoidingContext context);
 
     FastestTimeDto mapEntityToDto(FastestTimeEntity entity, @Context CycleAvoidingContext context);
+    @Mapping(target = "quiz", ignore = true)
+    FastestTimeDto mapEntityToDtoWithoutQuiz(FastestTimeEntity entity);
 }

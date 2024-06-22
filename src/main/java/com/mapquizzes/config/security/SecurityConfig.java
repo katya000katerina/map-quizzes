@@ -37,7 +37,7 @@ public class SecurityConfig {
                                 new RegexRequestMatcher("^(?!/api/v1/).*", HttpMethod.GET.toString())
                         ).permitAll()
                         .requestMatchers("/api/v1/auth/**").anonymous()
-                        .requestMatchers("/", "/api/v1/quizzes/**", "/api/v1/quizzes-questions/**").permitAll()
+                        .requestMatchers("/", "/api/v1/quizzes/**", "/api/v1/quizzes-questions/**", "/api/v1/fastest-time").permitAll()
                         .anyRequest().authenticated())
                 .userDetailsService(userDetailsService)
                 .exceptionHandling(e -> e.accessDeniedHandler(customAccessDeniedHandler)

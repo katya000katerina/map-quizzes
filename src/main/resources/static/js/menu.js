@@ -7,7 +7,7 @@ fetch('/api/v1/quizzes')
     .then(response => response.json())
     .then(json => {
         makeMenuOptions(json, 'quizzes', '/quiz-');
-        makeMenuOptions(json, 'ranking', '/ranking-quiz-');
+        makeMenuOptions(json, 'ranking', '/ranking?quiz=');
     });
 
 function makeMenuOptions(json, menuOption, href) {

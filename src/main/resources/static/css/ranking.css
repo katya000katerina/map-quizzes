@@ -1,0 +1,62 @@
+.ranking-table {
+    border-collapse: collapse;
+    font-size: 20px;
+    font-family: Georgia, serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ranking-table thead tr {
+    background-color: cadetblue;
+    color: #ffffff;
+    text-align: center;
+}
+
+.ranking-table th,
+.ranking-table td {
+    padding: 12px 15px;
+}
+
+.ranking-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.ranking-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.ranking-table tbody tr:last-of-type {
+    border-bottom: 2px solid cadetblue;
+}
+
+.ranking-table tbody tr.active-row {
+    font-weight: bold;
+    color: cadetblue;
+}
+
+.heading {
+    font-family: Georgia, serif;
+    text-align: center;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.button {
+    font-family: Georgia, serif;
+    background-color: cadetblue;
+    border: none;
+    color: white;
+    padding: 10px 5px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+    cursor: pointer;
+}

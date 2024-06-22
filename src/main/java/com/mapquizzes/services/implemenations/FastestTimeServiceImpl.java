@@ -12,6 +12,8 @@ import com.mapquizzes.services.interfaces.FastestTimeService;
 import com.mapquizzes.services.interfaces.QuizService;
 import com.mapquizzes.services.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,5 +51,12 @@ public class FastestTimeServiceImpl implements FastestTimeService {
             entity.setQuiz(quizEntity);
             fastestTimeRepo.saveOrUpdate(entity);
         }
+    }
+
+    @Override
+    public Page<FastestTimeDto> getDtoByQuizIdWithUserSortedByTimeAsc(Integer quizId, Pageable pageable) {
+        return fastestTimeRepo
+                .findByQuizIdWithUserSortedByTimeAsc(quizId, pageable)
+                .map(mapper::mapEntityToDtoWithoutQuiz);
     }
 }

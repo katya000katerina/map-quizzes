@@ -4,6 +4,8 @@ import com.mapquizzes.models.dto.FastestTimeDto;
 import com.mapquizzes.services.interfaces.FastestTimeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,5 +24,11 @@ public class FastestTimeRestController {
                                              Principal principal) {
         fastestTimeService.saveOrUpdate(dto, principal, quizId);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<FastestTimeDto>> getByQuizIdWithUserSortedByTimeAsc(@RequestParam("quiz-id") Integer quizId,
+                                                                                   Pageable pageable) {
+        return ResponseEntity.ok(fastestTimeService.getDtoByQuizIdWithUserSortedByTimeAsc(quizId, pageable));
     }
 }

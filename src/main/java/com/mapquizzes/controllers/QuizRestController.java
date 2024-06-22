@@ -6,9 +6,7 @@ import com.mapquizzes.models.dto.views.QuizViews;
 import com.mapquizzes.services.interfaces.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,5 +24,9 @@ public class QuizRestController {
         return ResponseEntity.ok(service.getAllDto().collect(Collectors.toList()));
     }
 
-
+    @JsonView(QuizViews.WithoutQuestions.class)
+    @GetMapping("/{id}")
+    public ResponseEntity<QuizDto> getById(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.getDtoById(id));
+    }
 }

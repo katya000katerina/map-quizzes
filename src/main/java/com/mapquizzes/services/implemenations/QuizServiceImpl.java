@@ -31,6 +31,11 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
+    public QuizDto getDtoById(Integer id) {
+        return mapper.mapEntityToDtoWithoutQuestions(getEntityById(id));
+    }
+
+    @Override
     public Stream<QuizDto> getAllDto() {
         return quizRepo.findAll().map(mapper::mapEntityToDto).sorted(Comparator.comparing(QuizDto::getId));
     }
