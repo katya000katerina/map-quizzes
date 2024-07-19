@@ -19,7 +19,7 @@ fetch('/api/v1/quizzes/' + quizId)
 showPage(0, pageSize);
 
 function showPage(pageNum) {
-    let url = '/api/v1/fastest-time?quiz-id=' + quizId + '&page=' + pageNum + '&size=' + pageSize + '&sort=timeInMillis,asc';
+    let url = '/api/v1/ranking?quiz-id=' + quizId + '&page=' + pageNum + '&size=' + pageSize + '&sort=timeInMillis,asc';
     fetch(url)
         .then(response => response.json())
         .then(json => makeTable(json));
@@ -62,7 +62,7 @@ function makeTable(json) {
     for (let i = 0; i < content.length; i++) {
         data += '<tr>';
         data += '<td>' + (offset + i + 1) + '</td>'
-        data += '<td>' + content[i].user.username + '</td>'
+        data += '<td>' + content[i].username + '</td>'
         data += '<td>' + getFormattedTime(content[i].timeInMillis) + '</td>'
         data += '</tr>';
     }

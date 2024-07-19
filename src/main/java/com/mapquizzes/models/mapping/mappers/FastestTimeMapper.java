@@ -1,6 +1,7 @@
 package com.mapquizzes.models.mapping.mappers;
 
 import com.mapquizzes.models.dto.FastestTimeDto;
+import com.mapquizzes.models.dto.GlobalRankingDto;
 import com.mapquizzes.models.entities.FastestTimeEntity;
 import com.mapquizzes.models.mapping.CycleAvoidingContext;
 import com.mapquizzes.models.mapping.MapstructIgnore;
@@ -31,6 +32,6 @@ public interface FastestTimeMapper {
     @Mapping(target = "quiz.questions", ignore = true)
     FastestTimeDto mapEntityToDtoWithoutQuizQuestions(FastestTimeEntity entity);
 
-//    @Mapping()
-//    PrincipalRankingDto mapDtoToPrincipalRankingDto(FastestTimeEntity fastestTimeEntity);
+    @Mapping(source = "user.username", target = "username")
+    GlobalRankingDto mapEntityToGlobalRankingDto(FastestTimeEntity fastestTimeEntity);
 }
