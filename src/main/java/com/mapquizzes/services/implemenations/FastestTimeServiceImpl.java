@@ -56,7 +56,7 @@ public class FastestTimeServiceImpl implements FastestTimeService {
     }
 
     @Override
-    public Page<FastestTimeDto> getDtoByQuizIdWithUserSortedByTimeAsc(Integer quizId, Pageable pageable) {
+    public Page<FastestTimeDto> getDtoByQuizIdWithUser(Integer quizId, Pageable pageable) {
         if (quizId == null) {
             throw new NullIdException("Quiz id is null");
         }

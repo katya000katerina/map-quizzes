@@ -29,6 +29,6 @@ public class FastestTimeRestController {
     @GetMapping
     public ResponseEntity<Page<FastestTimeDto>> getByQuizIdWithUserSortedByTimeAsc(@RequestParam("quiz-id") Integer quizId,
                                                                                    Pageable pageable) {
-        return ResponseEntity.ok(fastestTimeService.getDtoByQuizIdWithUserSortedByTimeAsc(quizId, pageable));
+        return ResponseEntity.ok(fastestTimeService.getDtoByQuizIdWithUser(quizId, pageable));
     }
 }

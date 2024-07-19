@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 public interface FastestTimeService {
     void saveOrUpdate(FastestTimeDto dto, Principal principal, Integer quizId);
 
-    Page<FastestTimeDto> getDtoByQuizIdWithUserSortedByTimeAsc(Integer quizId, Pageable pageable);
+    Page<FastestTimeDto> getDtoByQuizIdWithUser(Integer quizId, Pageable pageable);
 
     Stream<FastestTimeDto> getDtoByPrincipal(Principal principal);
 }
