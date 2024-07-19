@@ -4,7 +4,7 @@ import com.mapquizzes.exceptions.custom.EntityNotFoundException;
 import com.mapquizzes.models.dto.UserDto;
 import com.mapquizzes.models.entities.UserEntity;
 import com.mapquizzes.models.mapping.mappers.UserMapper;
-import com.mapquizzes.repositories.interfaces.UserRepository;
+import com.mapquizzes.repositories.UserRepository;
 import com.mapquizzes.services.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

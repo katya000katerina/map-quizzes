@@ -17,8 +17,8 @@ public interface QuizMapper {
         return mapEntityToDto(entity, new CycleAvoidingContext());
     }
 
-    @Named("main")
-    @Mapping(target = "questions[].quiz", qualifiedByName = "main")
+    @Named("withQuestions")
+    @Mapping(target = "questions[].quiz", qualifiedByName = "withQuestions")
     QuizDto mapEntityToDto(QuizEntity entity, @Context CycleAvoidingContext context);
 
     @Mapping(target = "questions", ignore = true)

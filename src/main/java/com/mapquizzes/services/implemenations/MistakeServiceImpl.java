@@ -7,7 +7,7 @@ import com.mapquizzes.models.entities.MistakeEntity;
 import com.mapquizzes.models.entities.QuestionEntity;
 import com.mapquizzes.models.entities.UserEntity;
 import com.mapquizzes.models.entities.compositekeys.MistakeId;
-import com.mapquizzes.repositories.interfaces.MistakeRepository;
+import com.mapquizzes.repositories.MistakeRepository;
 import com.mapquizzes.services.interfaces.MistakeService;
 import com.mapquizzes.services.interfaces.QuestionService;
 import com.mapquizzes.services.interfaces.UserService;
@@ -49,6 +49,6 @@ public class MistakeServiceImpl implements MistakeService {
         } else {
             mistakeEntity = new MistakeEntity(userEntity, questionEntity, dto.getNumberOfMistakes());
         }
-        mistakeRepo.saveOrUpdate(mistakeEntity);
+        mistakeRepo.save(mistakeEntity);
     }
 }

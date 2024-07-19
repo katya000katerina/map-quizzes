@@ -19,7 +19,7 @@ fetch('/api/v1/quizzes/' + quizId)
 showPage(0, pageSize);
 
 function showPage(pageNum) {
-    let url = '/api/v1/fastest-time?quiz-id=' + quizId + '&page=' + pageNum + '&size=' + pageSize;
+    let url = '/api/v1/fastest-time?quiz-id=' + quizId + '&page=' + pageNum + '&size=' + pageSize + '&sort=timeInMillis,asc';
     fetch(url)
         .then(response => response.json())
         .then(json => makeTable(json));

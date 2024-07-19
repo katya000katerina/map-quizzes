@@ -6,8 +6,9 @@ import com.mapquizzes.models.dto.FastestTimeDto;
 import com.mapquizzes.models.entities.FastestTimeEntity;
 import com.mapquizzes.models.entities.QuizEntity;
 import com.mapquizzes.models.entities.UserEntity;
+import com.mapquizzes.models.entities.compositekeys.FastestTimeId;
 import com.mapquizzes.models.mapping.mappers.FastestTimeMapper;
-import com.mapquizzes.repositories.interfaces.FastestTimeRepository;
+import com.mapquizzes.repositories.FastestTimeRepository;
 import com.mapquizzes.services.interfaces.FastestTimeService;
 import com.mapquizzes.services.interfaces.QuizService;
 import com.mapquizzes.services.interfaces.UserService;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -38,25 +40,42 @@ public class FastestTimeServiceImpl implements FastestTimeService {
             throw new IllegalArgumentException("Principal is null");
         }
         if (quizId == null) {
-            throw new NullIdException("Question id is null");
+            throw new NullIdException("Quiz id is null");
         }
 
         UserEntity userEntity = userService.getEntityByPrincipal(principal);
-        Optional<FastestTimeEntity> currEntityOp = fastestTimeRepo.getByUser(userEntity);
+        QuizEntity quizEntity = quizService.getEntityById(quizId);
+        Optional<FastestTimeEntity> currEntityOp = fastestTimeRepo.findById(new FastestTimeId(userEntity, quizEntity));
 
         if (currEntityOp.isEmpty() || currEntityOp.get().getTimeInMillis() > dto.getTimeInMillis()) {
             FastestTimeEntity entity = mapper.mapDtoToEntity(dto);
-            QuizEntity quizEntity = quizService.getEntityById(quizId);
             entity.setUser(userEntity);
             entity.setQuiz(quizEntity);
-            fastestTimeRepo.saveOrUpdate(entity);
+            fastestTimeRepo.save(entity);
         }
     }
 
     @Override
     public Page<FastestTimeDto> getDtoByQuizIdWithUserSortedByTimeAsc(Integer quizId, Pageable pageable) {
+        if (quizId == null) {
+            throw new NullIdException("Quiz id is null");
+        }
+        if (pageable == null) {
+            throw new IllegalArgumentException("Pageable is null");
+        }
         return fastestTimeRepo
-                .findByQuizIdWithUserSortedByTimeAsc(quizId, pageable)
+                .findAllByQuizId(quizId, pageable)
                 .map(mapper::mapEntityToDtoWithoutQuiz);
+    }
+
+    @Override
+    public Stream<FastestTimeDto> getDtoByPrincipal(Principal principal) {
+        if (principal == null) {
+            throw new IllegalArgumentException("Principal is null");
+        }
+        return fastestTimeRepo
+                .findByUser(userService.getEntityByPrincipal(principal))
+                .stream()
+                .map(mapper::mapEntityToDtoWithoutQuizQuestions);
     }
 }

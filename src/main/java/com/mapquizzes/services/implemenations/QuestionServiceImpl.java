@@ -2,7 +2,7 @@ package com.mapquizzes.services.implemenations;
 
 import com.mapquizzes.exceptions.custom.EntityNotFoundException;
 import com.mapquizzes.models.entities.QuestionEntity;
-import com.mapquizzes.repositories.interfaces.QuestionRepository;
+import com.mapquizzes.repositories.QuestionRepository;
 import com.mapquizzes.services.interfaces.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

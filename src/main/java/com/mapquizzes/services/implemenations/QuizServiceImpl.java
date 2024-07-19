@@ -5,13 +5,12 @@ import com.mapquizzes.exceptions.custom.NullIdException;
 import com.mapquizzes.models.dto.QuizDto;
 import com.mapquizzes.models.entities.QuizEntity;
 import com.mapquizzes.models.mapping.mappers.QuizMapper;
-import com.mapquizzes.repositories.interfaces.QuizRepository;
+import com.mapquizzes.repositories.QuizRepository;
 import com.mapquizzes.services.interfaces.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -37,6 +36,6 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public Stream<QuizDto> getAllDto() {
-        return quizRepo.findAll().map(mapper::mapEntityToDto).sorted(Comparator.comparing(QuizDto::getId));
+        return quizRepo.findAll().stream().map(mapper::mapEntityToDto).sorted(Comparator.comparing(QuizDto::getId));
     }
 }

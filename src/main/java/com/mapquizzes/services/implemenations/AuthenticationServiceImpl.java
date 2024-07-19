@@ -6,7 +6,7 @@ import com.mapquizzes.models.dto.AuthenticationDto;
 import com.mapquizzes.models.dto.UserDto;
 import com.mapquizzes.models.entities.UserEntity;
 import com.mapquizzes.models.mapping.mappers.UserMapper;
-import com.mapquizzes.repositories.interfaces.UserRepository;
+import com.mapquizzes.repositories.UserRepository;
 import com.mapquizzes.services.interfaces.AuthenticationService;
 import com.mapquizzes.services.interfaces.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -77,7 +77,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             }
         }
 
-        if (refreshToken == null){
+        if (refreshToken == null) {
             throw new RefreshTokenException("Refresh token is null");
         }
 

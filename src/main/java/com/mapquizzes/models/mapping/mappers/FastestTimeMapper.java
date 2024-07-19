@@ -24,6 +24,13 @@ public interface FastestTimeMapper {
     FastestTimeEntity mapDtoToEntity(FastestTimeDto dto, @Context CycleAvoidingContext context);
 
     FastestTimeDto mapEntityToDto(FastestTimeEntity entity, @Context CycleAvoidingContext context);
+
     @Mapping(target = "quiz", ignore = true)
     FastestTimeDto mapEntityToDtoWithoutQuiz(FastestTimeEntity entity);
+
+    @Mapping(target = "quiz.questions", ignore = true)
+    FastestTimeDto mapEntityToDtoWithoutQuizQuestions(FastestTimeEntity entity);
+
+//    @Mapping()
+//    PrincipalRankingDto mapDtoToPrincipalRankingDto(FastestTimeEntity fastestTimeEntity);
 }

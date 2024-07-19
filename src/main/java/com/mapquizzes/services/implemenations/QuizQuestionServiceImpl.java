@@ -6,7 +6,7 @@ import com.mapquizzes.exceptions.custom.NullIdException;
 import com.mapquizzes.models.dto.QuizDto;
 import com.mapquizzes.models.entities.QuizEntity;
 import com.mapquizzes.models.mapping.mappers.QuizMapper;
-import com.mapquizzes.repositories.interfaces.QuizRepository;
+import com.mapquizzes.repositories.QuizRepository;
 import com.mapquizzes.services.interfaces.QuizQuestionService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;

@@ -1,7 +1,7 @@
 package com.mapquizzes.services.implemenations;
 
 import com.mapquizzes.models.entities.UserEntity;
-import com.mapquizzes.repositories.interfaces.UserRepository;
+import com.mapquizzes.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
