@@ -29,6 +29,11 @@ const routes = {
         title: 'Mountains of the world',
         script: '/js/map_quiz.js'
     },
+    '/quiz-2' :{
+        page: '/pages/quiz_2.html',
+        title: 'Mountains of the world',
+        script: '/js/map_quiz.js'
+    },
     '/ranking' :{
         page: '/pages/ranking.html',
         title: 'ranking',
