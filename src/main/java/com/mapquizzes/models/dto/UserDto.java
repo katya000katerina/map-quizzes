@@ -19,7 +19,4 @@ public class UserDto {
     @ToString.Exclude
     private String password;
     private OffsetDateTime createdAt;
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private UserImageDto userImage;
 }

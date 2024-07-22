@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../css/my_profile.css">
+    <meta charset="UTF-8">
+    <title>My profile</title>
+</head>
+<body>
+<div id="content">
+    <div class="profile-container">
+        <div class="profile-header">
+            <h2>My profile</h2>
+        </div>
+        <div class="profile-info">
+            <div class="profile-image">
+                <img src="/api/v1/images/current" alt="User Photo" id="user-image">
+                <input type="file" id="upload-image" accept="image/*"/>
+                <label for="upload-image" class="upload-label">Upload</label>
+            </div>
+            <div class="profile-details">
+                <h3 id="username">Username</h3>
+                <h4>My ranking:</h4>
+                <ul id="ranking-list"></ul>
+                <a href="/" id="download-certificate">Download PDF Certificate</a>
+            </div>
+        </div>
+        <div class="mistakes-list">
+            <h3>Quizzes Mistakes</h3>
+            <div id="quiz-container"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
+<!--Now, when you click on the "Upload" text, it will trigger the file input dialog, allowing the user to select an image.-->
+
+<!--If you want to update the image when a file is selected, you'll need to add some JavaScript:-->
+
+
+<!--document.getElementById('upload-image').addEventListener('change', function(event) {-->
+<!--var file = event.target.files[0];-->
+<!--var reader = new FileReader();-->
+
+<!--reader.onload = function(e) {-->
+<!--document.getElementById('user-image').src = e.target.result;-->
+<!--}-->
+
+<!--reader.readAsDataURL(file);-->
+<!--});-->
+<!--This JavaScript code will update the image source with the selected file as soon as it's uploaded.-->

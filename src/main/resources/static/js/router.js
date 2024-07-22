@@ -38,6 +38,11 @@ const routes = {
         page: '/pages/ranking.html',
         title: 'ranking',
         script: '/js/ranking.js'
+    },
+    '/my-profile' :{
+        page: '/pages/my_profile.html',
+        title: 'My profile',
+        script: '/js/my_profile.js'
     }
 };
 

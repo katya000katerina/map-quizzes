@@ -23,8 +23,4 @@ public class UserEntity implements Serializable {
     private String password;
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private UserImageEntity userImage;
 }
