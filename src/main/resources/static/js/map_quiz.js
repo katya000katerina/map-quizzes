@@ -137,8 +137,8 @@ function updateMistakes(){
 }
 
 function updateTime(millis){
-    const path = '/api/v1/fastest-time/' + quizId;
-    const time = {timeInMillis : millis};
+    const path = '/api/v1/fastest-time';
+    const time = {quizId : quizId, timeInMillis : millis};
     const requestInit = {
         method: 'PUT',
         headers: {
