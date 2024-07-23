@@ -72,7 +72,7 @@ public class MistakeServiceImpl implements MistakeService {
                     mistake.getQuestion().getQuestion(),
                     mistake.getNumberOfMistakes()
             );
-            quizMistakes.getMistakes().add(principalMistake);
+            quizMistakes.mistakes().add(principalMistake);
         }
 
         return new ArrayList<>(quizMistakesMap.values());
