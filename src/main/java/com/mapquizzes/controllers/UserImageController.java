@@ -19,7 +19,7 @@ public class UserImageController {
     @GetMapping("/current")
     public ResponseEntity<byte[]> getPrincipalImage(Principal principal) {
         PrincipalImageDto dto = service.getPrincipalImage(principal);
-        return new ResponseEntity<>(dto.getBytes(), dto.getHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(dto.bytes(), dto.headers(), HttpStatus.OK);
     }
 
     @PostMapping
@@ -28,6 +28,6 @@ public class UserImageController {
             return ResponseEntity.badRequest().build();
         }
         PrincipalImageDto dto = service.saveOrUpdate(file, principal);
-        return new ResponseEntity<>(dto.getBytes(), dto.getHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(dto.bytes(), dto.headers(), HttpStatus.OK);
     }
 }
