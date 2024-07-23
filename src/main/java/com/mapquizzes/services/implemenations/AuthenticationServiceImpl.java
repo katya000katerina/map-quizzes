@@ -42,7 +42,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public AuthenticationDto signUp(UserDto userDto) {
-        String username = userDto.getUsername();
+        String username = userDto.username();
 
         if (userRepo.existsByUsername(username)) {
             throw new ValidationException(String.format("Username \"%s\" is not available", username));
@@ -63,10 +63,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationDto signIn(UserDto userDto) {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        userDto.getUsername(), userDto.getPassword()
+                        userDto.username(), userDto.password()
                 )
         );
-        UserEntity userEntity = userRepo.findByUsername(userDto.getUsername()).orElseThrow();
+        UserEntity userEntity = userRepo.findByUsername(userDto.username()).orElseThrow();
         return getAuthenticationDto(userEntity);
     }
 
