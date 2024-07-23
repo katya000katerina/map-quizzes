@@ -18,11 +18,10 @@ import java.util.List;
 public class MistakesRestController {
     private final MistakeService mistakeService;
 
-    @PutMapping("/{questionId}")
-    public ResponseEntity<Void> saveOrUpdate(@PathVariable Integer questionId,
-                                             @Valid @RequestBody MistakeDto dto,
+    @PutMapping
+    public ResponseEntity<Void> saveOrUpdate(@Valid @RequestBody MistakeDto dto,
                                              Principal principal) {
-        mistakeService.saveOrUpdate(dto, principal, questionId);
+        mistakeService.saveOrUpdate(dto, principal);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

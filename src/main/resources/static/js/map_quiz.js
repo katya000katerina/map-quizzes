@@ -124,8 +124,8 @@ function checkAnswer(answer) {
 }
 
 function updateMistakes(){
-    const path = '/api/v1/mistakes/' + questions[randomNumber].id;
-    const mistake = {numberOfMistakes : mistakesCount};
+    const path = '/api/v1/mistakes';
+    const mistake = {questionId : questions[randomNumber].id, numberOfMistakes : mistakesCount};
     const requestInit = {
         method: 'PUT',
         headers: {

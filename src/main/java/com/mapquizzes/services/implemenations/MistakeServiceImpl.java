@@ -1,7 +1,6 @@
 package com.mapquizzes.services.implemenations;
 
 import com.mapquizzes.exceptions.custom.NullDtoException;
-import com.mapquizzes.exceptions.custom.NullIdException;
 import com.mapquizzes.models.dto.MistakeDto;
 import com.mapquizzes.models.dto.PrincipalQuizMistakesDto;
 import com.mapquizzes.models.entities.MistakeEntity;
@@ -29,27 +28,24 @@ public class MistakeServiceImpl implements MistakeService {
 
     @Override
     @Transactional
-    public void saveOrUpdate(MistakeDto dto, Principal principal, Integer questionId) {
+    public void saveOrUpdate(MistakeDto dto, Principal principal) {
         if (dto == null) {
             throw new NullDtoException("MistakeDto is null");
         }
         if (principal == null) {
             throw new IllegalArgumentException("Principal is null");
         }
-        if (questionId == null) {
-            throw new NullIdException("Question id is null");
-        }
 
         UserEntity userEntity = userService.getEntityByPrincipal(principal);
-        QuestionEntity questionEntity = questionService.getEntityById(questionId);
+        QuestionEntity questionEntity = questionService.getEntityById(dto.questionId());
 
         Optional<MistakeEntity> currMistakeEntityOp = mistakeRepo.findById(new MistakeId(userEntity, questionEntity));
         MistakeEntity mistakeEntity;
         if (currMistakeEntityOp.isPresent()) {
             mistakeEntity = currMistakeEntityOp.get();
-            mistakeEntity.setNumberOfMistakes(mistakeEntity.getNumberOfMistakes() + dto.getNumberOfMistakes());
+            mistakeEntity.setNumberOfMistakes(mistakeEntity.getNumberOfMistakes() + dto.numberOfMistakes());
         } else {
-            mistakeEntity = new MistakeEntity(userEntity, questionEntity, dto.getNumberOfMistakes());
+            mistakeEntity = new MistakeEntity(userEntity, questionEntity, dto.numberOfMistakes());
         }
         mistakeRepo.save(mistakeEntity);
     }

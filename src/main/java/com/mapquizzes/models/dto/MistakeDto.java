@@ -1,14 +1,8 @@
 package com.mapquizzes.models.dto;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import jakarta.validation.constraints.Positive;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class MistakeDto {
-    private UserDto user;
-    private QuestionDto question;
-    @NotNull
-    private Integer numberOfMistakes;
+public record MistakeDto(@NotNull @Positive Integer questionId,
+                         @NotNull @Positive Integer numberOfMistakes) {
 }
