@@ -19,7 +19,7 @@ import java.security.Principal;
 public class FastestTimeRestController {
     private final FastestTimeService fastestTimeService;
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<Void> saveOrUpdate(@Valid @RequestBody TestCompletionTimeDto dto,
                                              Principal principal) {
         fastestTimeService.saveOrUpdate(dto, principal);
