@@ -36,6 +36,6 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public Stream<QuizDto> getAllDto() {
-        return quizRepo.findAll().stream().map(mapper::mapEntityToDto).sorted(Comparator.comparing(QuizDto::getId));
+        return quizRepo.findAll().stream().map(mapper::mapEntityToDto).sorted(Comparator.comparing(QuizDto::id));
     }
 }
