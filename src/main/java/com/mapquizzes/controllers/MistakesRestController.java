@@ -1,7 +1,7 @@
 package com.mapquizzes.controllers;
 
 import com.mapquizzes.models.dto.MistakeDto;
-import com.mapquizzes.models.dto.PrincipalQuizMistakes;
+import com.mapquizzes.models.dto.PrincipalQuizMistakesDto;
 import com.mapquizzes.services.interfaces.MistakeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +27,8 @@ public class MistakesRestController {
     }
 
     @GetMapping("/current")
-    public ResponseEntity<List<PrincipalQuizMistakes>> getMistakesForPrincipal(Principal principal) {
-        List<PrincipalQuizMistakes> mistakes = mistakeService.getMistakesForPrincipal(principal);
+    public ResponseEntity<List<PrincipalQuizMistakesDto>> getMistakesForPrincipal(Principal principal) {
+        List<PrincipalQuizMistakesDto> mistakes = mistakeService.getMistakesForPrincipal(principal);
         return ResponseEntity.ok(mistakes);
     }
 

@@ -3,7 +3,7 @@ package com.mapquizzes.services.implemenations;
 import com.mapquizzes.exceptions.custom.NullDtoException;
 import com.mapquizzes.exceptions.custom.NullIdException;
 import com.mapquizzes.models.dto.MistakeDto;
-import com.mapquizzes.models.dto.PrincipalQuizMistakes;
+import com.mapquizzes.models.dto.PrincipalQuizMistakesDto;
 import com.mapquizzes.models.entities.MistakeEntity;
 import com.mapquizzes.models.entities.QuestionEntity;
 import com.mapquizzes.models.entities.QuizEntity;
@@ -54,25 +54,25 @@ public class MistakeServiceImpl implements MistakeService {
         mistakeRepo.save(mistakeEntity);
     }
 
-    public List<PrincipalQuizMistakes> getMistakesForPrincipal(Principal principal) {
+    public List<PrincipalQuizMistakesDto> getMistakesForPrincipal(Principal principal) {
         UserEntity user = userService.getEntityByPrincipal(principal);
 
         List<MistakeEntity> mistakes = mistakeRepo.getAllByUser(user);
 
-        Map<Integer, PrincipalQuizMistakes> quizMistakesMap = new HashMap<>();
+        Map<Integer, PrincipalQuizMistakesDto> quizMistakesMap = new HashMap<>();
 
         for (MistakeEntity mistake : mistakes) {
             QuizEntity quiz = mistake.getQuestion().getQuiz();
-            PrincipalQuizMistakes quizMistakes = quizMistakesMap.computeIfAbsent(
+            PrincipalQuizMistakesDto quizMistakes = quizMistakesMap.computeIfAbsent(
                     quiz.getId(),
-                    id -> new PrincipalQuizMistakes(id, quiz.getName(), new ArrayList<>())
+                    id -> new PrincipalQuizMistakesDto(id, quiz.getName(), new ArrayList<>())
             );
 
-            PrincipalQuizMistakes.PrincipalMistake principalMistake = new PrincipalQuizMistakes.PrincipalMistake(
+            PrincipalQuizMistakesDto.PrincipalMistakeDto principalMistakeDto = new PrincipalQuizMistakesDto.PrincipalMistakeDto(
                     mistake.getQuestion().getQuestion(),
                     mistake.getNumberOfMistakes()
             );
-            quizMistakes.mistakes().add(principalMistake);
+            quizMistakes.mistakes().add(principalMistakeDto);
         }
 
         return new ArrayList<>(quizMistakesMap.values());
