@@ -38,7 +38,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers("/api/v1/auth/**").anonymous()
                         .requestMatchers("/", "/api/v1/quizzes/**",
-                                "/api/v1/quizzes-questions/**", "/api/v1/fastest-time",
+                                "/api/v1/quizzes-questions/**",
                                 "/api/v1/ranking").permitAll()
                         .anyRequest().authenticated())
                 .userDetailsService(userDetailsService)

@@ -13,14 +13,11 @@ import com.mapquizzes.services.interfaces.FastestTimeService;
 import com.mapquizzes.services.interfaces.QuizService;
 import com.mapquizzes.services.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -53,29 +50,5 @@ public class FastestTimeServiceImpl implements FastestTimeService {
             entity.setQuiz(quizEntity);
             fastestTimeRepo.save(entity);
         }
-    }
-
-    @Override
-    public Page<FastestTimeDto> getDtoByQuizIdWithUser(Integer quizId, Pageable pageable) {
-        if (quizId == null) {
-            throw new NullIdException("Quiz id is null");
-        }
-        if (pageable == null) {
-            throw new IllegalArgumentException("Pageable is null");
-        }
-        return fastestTimeRepo
-                .findAllByQuizId(quizId, pageable)
-                .map(mapper::mapEntityToDtoWithoutQuiz);
-    }
-
-    @Override
-    public Stream<FastestTimeDto> getDtoByPrincipal(Principal principal) {
-        if (principal == null) {
-            throw new IllegalArgumentException("Principal is null");
-        }
-        return fastestTimeRepo
-                .findByUser(userService.getEntityByPrincipal(principal))
-                .stream()
-                .map(mapper::mapEntityToDtoWithoutQuizQuestions);
     }
 }
