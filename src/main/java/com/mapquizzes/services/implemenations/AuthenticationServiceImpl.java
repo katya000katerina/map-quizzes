@@ -10,7 +10,6 @@ import com.mapquizzes.repositories.UserRepository;
 import com.mapquizzes.services.interfaces.AuthenticationService;
 import com.mapquizzes.services.interfaces.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.server.Cookie;
@@ -42,12 +41,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public AuthenticationDto signUp(UserDto userDto) {
-        String username = userDto.username();
-
-        if (userRepo.existsByUsername(username)) {
-            throw new ValidationException(String.format("Username \"%s\" is not available", username));
-        }
-
         UserEntity userEntity = mapper.mapDtoToEntity(userDto);
         userEntity.setCreatedAt(OffsetDateTime.now());
         userEntity.setPassword(encoder.encode(userEntity.getPassword()));

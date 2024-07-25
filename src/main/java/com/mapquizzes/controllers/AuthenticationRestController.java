@@ -3,11 +3,13 @@ package com.mapquizzes.controllers;
 import com.mapquizzes.models.dto.AuthenticationDto;
 import com.mapquizzes.models.dto.UserDto;
 import com.mapquizzes.services.interfaces.AuthenticationService;
+import com.mapquizzes.validation.groups.user.SignIn;
+import com.mapquizzes.validation.groups.user.SignUp;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +22,7 @@ public class AuthenticationRestController {
     private final AuthenticationService authService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<UserDto> signUp(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> signUp(@Validated(SignUp.class) @RequestBody UserDto userDto) {
         AuthenticationDto authDto = authService.signUp(userDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -29,7 +31,7 @@ public class AuthenticationRestController {
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<UserDto> signIn(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> signIn(@Validated(SignIn.class) @RequestBody UserDto userDto) {
         AuthenticationDto authDto = authService.signIn(userDto);
         return ResponseEntity
                 .ok()

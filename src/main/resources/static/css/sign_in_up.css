@@ -1,5 +1,6 @@
 .form-wrapper {
     margin: 80px;
+    font-family: Georgia, serif;
 }
 
 form {
@@ -37,7 +38,6 @@ form {
 
 .info {
     position: relative;
-    font-family: Georgia, serif;
     text-align: center;
     color: red;
 }
@@ -61,4 +61,14 @@ a {
     position: relative;
     display: flex;
     justify-content: center;
+}
+
+#error-container {
+    display: none;
+}
+
+.error-message {
+    margin: 5px 0;
+    color: red;
+    text-align: center;
 }
