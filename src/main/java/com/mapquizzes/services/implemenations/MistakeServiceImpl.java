@@ -50,6 +50,13 @@ public class MistakeServiceImpl implements MistakeService {
         mistakeRepo.save(mistakeEntity);
     }
 
+    @Override
+    @Transactional
+    public void deleteByQuestionIdAndPrincipal(Integer questionId, Principal principal) {
+        UserEntity user = userService.getEntityByPrincipal(principal);
+        mistakeRepo.deleteByQuestionIdAndUser(questionId, user);
+    }
+
     public List<PrincipalQuizMistakesDto> getMistakesForPrincipal(Principal principal) {
         UserEntity user = userService.getEntityByPrincipal(principal);
 
@@ -65,6 +72,7 @@ public class MistakeServiceImpl implements MistakeService {
             );
 
             PrincipalQuizMistakesDto.PrincipalMistakeDto principalMistakeDto = new PrincipalQuizMistakesDto.PrincipalMistakeDto(
+                    mistake.getQuestion().getId(),
                     mistake.getQuestion().getQuestion(),
                     mistake.getNumberOfMistakes()
             );

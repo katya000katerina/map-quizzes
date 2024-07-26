@@ -2,31 +2,40 @@ import {fetchWithAuth} from './refresh_token.js';
 
 let questions = [];
 let url = window.location.pathname;
-let quizId = url.substring(url.length - 1);
+const mistakeQuizPath = "/mistakes";
+const isMistakesQuiz = url.endsWith(mistakeQuizPath);
+const isUserAuth = isMistakesQuiz ? true : (await fetchWithAuth('/api/v1/users/current')).ok;
+const quizId = isMistakesQuiz ?
+    url.substring(url.length - mistakeQuizPath.length - 1, url.length - mistakeQuizPath.length) :
+    url.substring(url.length - 1);
 let quizName;
 let mistakesCount = 0; //a number of mistakes a user did while answering the current question
 let notFirstTryAnswersCount = 0; //a number of questions a user could not give an answer to on the first try
 let numberOfQuestions = 0;
 let wasWrongAnswer = false; //whether there were wrong answers to the current question
 let randomNumber;
-let start = new Date();
-let isUserAuth = false;
+const start = new Date();
 
 uploadMap();
 
 addOnClick();
 
-fetch('/api/v1/quizzes-questions/' + quizId)
-    .then(response => response.json())
-    .then(json => {
-        quizName = json.name;
-        questions = json.questions;
-        numberOfQuestions = questions.length;
-        changeQuestion();
-    });
+fetchQuestions()
 
-fetchWithAuth('/api/v1/users/current')
-    .then(response => isUserAuth = response.ok);
+async function fetchQuestions() {
+    const path = '/api/v1/quizzes-questions/' + quizId;
+    let response;
+    if (isMistakesQuiz) {
+        response = await fetchWithAuth(path + mistakeQuizPath);
+    } else {
+        response = await fetch(path);
+    }
+    const json = await response.json();
+    quizName = json.name;
+    questions = json.questions;
+    numberOfQuestions = questions.length;
+    changeQuestion();
+}
 
 function addOnClick() {
     let elements = document.getElementsByClassName('question')
@@ -82,30 +91,39 @@ function help(question) {
 
 
 function getQuizCompletedMessage(firstTryAnswersCount) {
+    const message = 'You scored ' + firstTryAnswersCount + ' out of ' + numberOfQuestions + '.';
+    if (isMistakesQuiz) {
+        return message;
+    }
+
     let end = new Date();
     let timeInMillis = end.getTime() - start.getTime();
     let millis = timeInMillis % 1000;
     let seconds = ((timeInMillis - millis) % 60000) / 1000;
     let minutes = (timeInMillis - timeInMillis % 60000) / 60000;
-    if (isUserAuth){
+    if (isUserAuth) {
         updateTime(timeInMillis);
     }
-    return 'You scored ' + firstTryAnswersCount
-        + ' out of ' + numberOfQuestions + '. Time: ' + minutes + ' min ' + seconds + ' sec ' + millis + ' ms';
+
+    return message + ' Time: ' + minutes + ' min ' + seconds + ' sec ' + millis + ' ms';
 }
 
 function checkAnswer(answer) {
     if (questions[randomNumber].question === answer) {
         if (wasWrongAnswer) {
-            if (isUserAuth){
+            if (isUserAuth) {
                 updateMistakes();
             }
             ++notFirstTryAnswersCount;
             wasWrongAnswer = false;
+        } else if (isMistakesQuiz) {
+            removeMistake();
         }
+
         changeColor(answer);
         mistakesCount = 0;
         removeQuestion(answer);
+
         if (questions.length !== 0) {
             changeQuestion();
             return 'You are right! Where is it located?';
@@ -123,9 +141,9 @@ function checkAnswer(answer) {
     }
 }
 
-function updateMistakes(){
+function updateMistakes() {
     const path = '/api/v1/mistakes';
-    const mistake = {questionId : questions[randomNumber].id, numberOfMistakes : mistakesCount};
+    const mistake = {questionId: questions[randomNumber].id, numberOfMistakes: mistakesCount};
     const requestInit = {
         method: 'PUT',
         headers: {
@@ -136,9 +154,15 @@ function updateMistakes(){
     fetchWithAuth(path, requestInit);
 }
 
-function updateTime(millis){
+function removeMistake() {
+    const path = '/api/v1/mistakes?question-id=' + questions[randomNumber].id;
+    const requestInit = {method: 'DELETE'};
+    fetchWithAuth(path, requestInit);
+}
+
+function updateTime(millis) {
     const path = '/api/v1/fastest-time';
-    const time = {quizId : quizId, timeInMillis : millis};
+    const time = {quizId: quizId, timeInMillis: millis};
     const requestInit = {
         method: 'PUT',
         headers: {

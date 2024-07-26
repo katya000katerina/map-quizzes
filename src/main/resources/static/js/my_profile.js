@@ -57,7 +57,7 @@ function createMistakesLists(json) {
         });
 
         const link = document.createElement('a');
-        link.href = `/take-quiz?quizId=${quiz.quizId}`; //TODO
+        link.href = `/quiz-${quiz.quizId}/mistakes`;
         link.textContent = 'Take a quiz on these mistakes';
         content.appendChild(link);
 

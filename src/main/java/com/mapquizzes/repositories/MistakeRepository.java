@@ -12,4 +12,5 @@ public interface MistakeRepository extends JpaRepository<MistakeEntity, MistakeI
     @Query("select m from MistakeEntity m join fetch m.question qs join fetch qs.quiz qz where m.user = :user")
     List<MistakeEntity> getAllByUser(UserEntity user);
 
+    void deleteByQuestionIdAndUser(Integer questionId, UserEntity user);
 }

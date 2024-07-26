@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/v1/quizzes-questions")
 @RequiredArgsConstructor
@@ -22,5 +24,11 @@ public class QuizQuestionsRestController {
     @GetMapping("/{quizId}")
     public ResponseEntity<QuizDto> getQuizWithQuestions(@PathVariable Integer quizId) {
         return ResponseEntity.ok(service.getQuizByIdWithQuestions(quizId));
+    }
+
+    @JsonView(QuizViews.WithQuestions.class)
+    @GetMapping("/{quizId}/mistakes")
+    public ResponseEntity<QuizDto> getMistakesQuizWithQuestions(@PathVariable Integer quizId, Principal principal) {
+        return ResponseEntity.ok(service.getMistakesQuizByIdWithQuestions(quizId, principal));
     }
 }
