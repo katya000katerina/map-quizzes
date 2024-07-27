@@ -1,6 +1,6 @@
 package com.mapquizzes.controllers;
 
-import com.mapquizzes.models.dto.PrincipalImageDto;
+import com.mapquizzes.models.dto.PrincipalProfileImageDto;
 import com.mapquizzes.services.interfaces.UserImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ public class UserImageController {
 
     @GetMapping("/current")
     public ResponseEntity<byte[]> getPrincipalImage(Principal principal) {
-        PrincipalImageDto dto = service.getPrincipalImage(principal);
+        PrincipalProfileImageDto dto = service.getPrincipalProfileImageDto(principal);
         return new ResponseEntity<>(dto.bytes(), dto.headers(), HttpStatus.OK);
     }
 
@@ -27,7 +27,7 @@ public class UserImageController {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        PrincipalImageDto dto = service.saveOrUpdate(file, principal);
+        PrincipalProfileImageDto dto = service.saveOrUpdate(file, principal);
         return new ResponseEntity<>(dto.bytes(), dto.headers(), HttpStatus.OK);
     }
 }

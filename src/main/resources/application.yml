@@ -26,3 +26,7 @@ map-quizzes:
         expiration-time: 900000
       refresh-token:
         expiration-time: 604800000
+  resources:
+    no-image: classpath:static/images/no image.png
+    certificate: classpath:static/certificate/certificate.pdf
+    frame: classpath:static/certificate/frame.png
