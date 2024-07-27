@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/ranking")
 @RequiredArgsConstructor
-public class RankingController {
+public class RankingRestController {
     private final RankingService rankingService;
 
     @GetMapping

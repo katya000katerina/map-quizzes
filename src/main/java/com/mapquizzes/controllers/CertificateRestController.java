@@ -17,7 +17,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/v1/certificate")
 @RequiredArgsConstructor
-public class CertificateController {
+public class CertificateRestController {
     private final CertificateService certificateService;
 
     @GetMapping
