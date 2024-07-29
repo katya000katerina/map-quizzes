@@ -33,6 +33,13 @@ fetchWithAuth('/api/v1/ranking/current')
     .then(json => createRankingList(json));
 
 function createRankingList(json) {
+    if (Object.keys(json).length === 0) {
+        document.getElementById('my-ranking').textContent = 'Complete at least one test to see your ranking!';
+        document.getElementById('ranking-list').style.visibility = 'hidden';
+        document.getElementById('download-certificate').style.visibility = 'hidden';
+        return;
+    }
+
     const listContainer = document.getElementById('ranking-list');
     json.forEach(quiz => {
         const listItem = document.createElement('li');
@@ -42,7 +49,12 @@ function createRankingList(json) {
 }
 
 function createMistakesLists(json) {
-    const container = document.getElementById('quiz-container');
+    if (Object.keys(json).length === 0) {
+        document.getElementById('mistakes-list').style.visibility = 'hidden';
+        return;
+    }
+
+    const container = document.getElementById('mistakes-container');
     json.forEach(quiz => {
         const btn = document.createElement('button');
         btn.className = 'collapsible';
