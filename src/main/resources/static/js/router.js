@@ -61,11 +61,11 @@ const routes = {
         access: Access.authorized
     },
     '/settings': {
-        page: '/pages/settings.html',
+    page: '/pages/settings.html',
         title: 'My profile',
         script: '/js/settings.js',
-        access: Access.authorized
-    }
+        access: Access.authorized}
+
 };
 
 const locationHandler = async () => {
@@ -110,5 +110,3 @@ const locationHandler = async () => {
 window.onpopstate = locationHandler;
 window.route = route;
 locationHandler();
-
-
