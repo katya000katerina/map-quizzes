@@ -1,9 +1,9 @@
 package com.mapquizzes.config.security;
 
 import com.mapquizzes.services.interfaces.JwtService;
+import com.mapquizzes.utils.CookieTokenUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,19 +30,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain)
             throws ServletException, IOException {
-        String accessToken = null;
-        Cookie[] cookies = request.getCookies();
 
-        if (cookies == null || cookies.length == 0) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals("accessToken")) {
-                accessToken = cookie.getValue();
-            }
-        }
+        String accessToken = CookieTokenUtils.extractAccessToken(request);
 
         if (accessToken == null) {
             filterChain.doFilter(request, response);

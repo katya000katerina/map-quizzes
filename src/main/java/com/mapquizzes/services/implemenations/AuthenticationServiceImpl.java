@@ -9,6 +9,8 @@ import com.mapquizzes.models.mapping.mappers.UserMapper;
 import com.mapquizzes.repositories.UserRepository;
 import com.mapquizzes.services.interfaces.AuthenticationService;
 import com.mapquizzes.services.interfaces.JwtService;
+import com.mapquizzes.services.interfaces.TokenBlacklistService;
+import com.mapquizzes.utils.CookieTokenUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +34,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepo;
     private final PasswordEncoder encoder;
     private final JwtService jwtService;
+    private final TokenBlacklistService blacklistService;
     private final AuthenticationManager authManager;
     @Value("${map-quizzes.security.jwt.access-token.expiration-time}")
     private long accessTokenExpTime;
@@ -65,18 +68,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationDto refreshToken(HttpServletRequest request) {
-        jakarta.servlet.http.Cookie[] cookies = request.getCookies();
-        String refreshToken = null;
-
-        if (cookies == null || cookies.length == 0) {
-            throw new RefreshTokenException("Refresh token was not received");
-        }
-
-        for (jakarta.servlet.http.Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals("refreshToken")) {
-                refreshToken = cookie.getValue();
-            }
-        }
+        String refreshToken = CookieTokenUtils.extractRefreshToken(request);
 
         if (refreshToken == null) {
             throw new RefreshTokenException("Refresh token is null");
@@ -89,6 +81,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (jwtService.isRefreshTokenValid(refreshToken, userDetails)) {
             return getAuthenticationDto(userEntity);
         } else throw new RefreshTokenException("Refresh token is not valid");
+    }
+
+    @Override
+    public AuthenticationDto getNewTokensForPrincipal(UserEntity userEntity, HttpServletRequest request) {
+        blacklistService.blacklistAccessAndRefreshTokens(request);
+        return getAuthenticationDto(userEntity);
     }
 
     private AuthenticationDto getAuthenticationDto(UserEntity userEntity) {

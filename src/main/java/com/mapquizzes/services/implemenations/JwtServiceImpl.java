@@ -2,7 +2,7 @@ package com.mapquizzes.services.implemenations;
 
 import com.mapquizzes.models.entities.UserEntity;
 import com.mapquizzes.services.interfaces.JwtService;
-import com.mapquizzes.services.interfaces.TokenBlacklistService;
+import com.mapquizzes.repositories.TokenBlacklistRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -19,7 +19,7 @@ import java.util.function.Function;
 @Service
 @RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
-    private final TokenBlacklistService blacklistService;
+    private final TokenBlacklistRepository blacklistRepository;
     @Value("${map-quizzes.security.jwt.secret-key}")
     private String secretKey;
     @Value("${map-quizzes.security.jwt.access-token.expiration-time}")
@@ -43,11 +43,11 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private boolean isAccessTokenBlacklisted(String token) {
-        return blacklistService.getBlacklistedAccessToken(token) != null;
+        return blacklistRepository.getBlacklistedAccessToken(token) != null;
     }
 
     private boolean isRefreshTokenBlacklisted(String token) {
-        return blacklistService.getBlacklistedRefreshToken(token) != null;
+        return blacklistRepository.getBlacklistedRefreshToken(token) != null;
     }
 
     private boolean isTokenExpired(String token) {

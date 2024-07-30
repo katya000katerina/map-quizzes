@@ -1,35 +1,26 @@
 package com.mapquizzes.services.implemenations;
 
-import com.mapquizzes.config.CacheConfig;
+import com.mapquizzes.models.dto.TokensDto;
+import com.mapquizzes.repositories.TokenBlacklistRepository;
 import com.mapquizzes.services.interfaces.TokenBlacklistService;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import com.mapquizzes.utils.CookieTokenUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class TokenBlacklistServiceImpl implements TokenBlacklistService {
+    private final TokenBlacklistRepository blacklistRepository;
 
     @Override
-    @CachePut(CacheConfig.ACCESS_TOKEN_BLACKLIST_CACHE_NAME)
-    public String blacklistAccessToken(String token) {
-        return token;
-    }
+    public void blacklistAccessAndRefreshTokens(HttpServletRequest request) {
+        TokensDto tokens = CookieTokenUtils.extractAccessAndRefreshTokens(request);
 
-    @Override
-    @Cacheable(value = CacheConfig.ACCESS_TOKEN_BLACKLIST_CACHE_NAME, unless = "#result == null")
-    public String getBlacklistedAccessToken(String token) {
-        return null;
-    }
+        String accessToken = tokens.accessToken();
+        String refreshToken = tokens.refreshToken();
 
-    @Override
-    @CachePut(CacheConfig.REFRESH_TOKEN_BLACKLIST_CACHE_NAME)
-    public String blacklistRefreshToken(String token) {
-        return token;
-    }
-
-    @Override
-    @Cacheable(value = CacheConfig.REFRESH_TOKEN_BLACKLIST_CACHE_NAME, unless = "#result == null")
-    public String getBlacklistedRefreshToken(String token) {
-        return null;
+        blacklistRepository.blacklistAccessToken(accessToken);
+        blacklistRepository.blacklistRefreshToken(refreshToken);
     }
 }
