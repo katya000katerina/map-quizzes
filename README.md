@@ -26,6 +26,17 @@ The project has implemented core functionality including user authentication, in
 - Home page implementation
 - Comprehensive testing suite
 
+## Features Showcase
+
+### Taking a Quiz
+![Taking a Quiz](./assets/quiz-demo.gif)
+
+### User Profile
+![User Profile](./assets/user-profile-demo.gif)
+
+### Ranking System
+![Ranking System](./assets/ranking-demo.gif)
+
 ## Technology Stack
 
 - Backend: Java 17, Spring Framework (Core, Boot, Web, Security, Data JPA)
