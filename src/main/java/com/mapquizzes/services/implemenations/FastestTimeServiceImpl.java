@@ -24,8 +24,8 @@ public class FastestTimeServiceImpl implements FastestTimeService {
     private final UserService userService;
     private final QuizService quizService;
 
-    @Override
     @Transactional
+    @Override
     public void saveOrUpdate(TestCompletionTimeDto dto, Principal principal) {
         if (dto == null) {
             throw new NullDtoException("TestCompletionTimeDto is null");
@@ -43,5 +43,11 @@ public class FastestTimeServiceImpl implements FastestTimeService {
             FastestTimeEntity entity = new FastestTimeEntity(userEntity, quizEntity, timeInMillis);
             fastestTimeRepo.save(entity);
         }
+    }
+
+    @Transactional
+    @Override
+    public void deleteAllByUser(UserEntity user) {
+        fastestTimeRepo.deleteAllByUser(user);
     }
 }

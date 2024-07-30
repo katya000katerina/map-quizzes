@@ -46,13 +46,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationDto signUp(UserDto userDto) {
         UserEntity userEntity = mapper.mapDtoToEntity(userDto);
         userEntity.setCreatedAt(OffsetDateTime.now());
-        userEntity.setPassword(encoder.encode(userEntity.getPassword()));
+        setEncodedPassword(userEntity, userEntity.getPassword());
         userRepo.save(userEntity);
 
         userDto = mapper.mapEntityToDto(userEntity);
         AuthenticationDto authDto = getAuthenticationDto(userEntity);
         authDto.setUserDto(userDto);
         return authDto;
+    }
+
+    @Override
+    public void setEncodedPassword(UserEntity userEntity, String passwordToEncode) {
+        userEntity.setPassword(encoder.encode(passwordToEncode));
     }
 
     @Override
@@ -70,17 +75,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationDto refreshToken(HttpServletRequest request) {
         String refreshToken = CookieTokenUtils.extractRefreshToken(request);
 
-        if (refreshToken == null) {
-            throw new RefreshTokenException("Refresh token is null");
+        if (refreshToken == null || jwtService.isRefreshTokenBlacklisted(refreshToken)) {
+            throw new RefreshTokenException();
         }
 
         String username = jwtService.extractUsername(refreshToken);
         UserEntity userEntity = userRepo.findByUsername(username).orElseThrow(EntityNotFoundException::new);
         UserDetails userDetails = User.builder().username(username).password(userEntity.getPassword()).build();
 
-        if (jwtService.isRefreshTokenValid(refreshToken, userDetails)) {
+        if (jwtService.isTokenValid(refreshToken, userDetails)) {
             return getAuthenticationDto(userEntity);
-        } else throw new RefreshTokenException("Refresh token is not valid");
+        } else throw new RefreshTokenException();
     }
 
     @Override

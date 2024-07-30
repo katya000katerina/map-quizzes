@@ -26,8 +26,8 @@ public class MistakeServiceImpl implements MistakeService {
     private final UserService userService;
     private final QuestionService questionService;
 
-    @Override
     @Transactional
+    @Override
     public void saveOrUpdate(MistakeDto dto, Principal principal) {
         if (dto == null) {
             throw new NullDtoException("MistakeDto is null");
@@ -50,8 +50,14 @@ public class MistakeServiceImpl implements MistakeService {
         mistakeRepo.save(mistakeEntity);
     }
 
-    @Override
     @Transactional
+    @Override
+    public void deleteAllByUser(UserEntity user) {
+        mistakeRepo.deleteAllByUser(user);
+    }
+
+    @Transactional
+    @Override
     public void deleteByQuestionIdAndPrincipal(Integer questionId, Principal principal) {
         UserEntity user = userService.getEntityByPrincipal(principal);
         mistakeRepo.deleteByQuestionIdAndUser(questionId, user);

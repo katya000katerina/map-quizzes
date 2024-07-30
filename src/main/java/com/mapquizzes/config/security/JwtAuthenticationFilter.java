@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String accessToken = CookieTokenUtils.extractAccessToken(request);
 
-        if (accessToken == null) {
+        if (accessToken == null || jwtService.isAccessTokenBlacklisted(accessToken)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            if (jwtService.isAccessTokenValid(accessToken, userDetails)) {
+            if (jwtService.isTokenValid(accessToken, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
 

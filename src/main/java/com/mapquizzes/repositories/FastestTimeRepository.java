@@ -1,6 +1,7 @@
 package com.mapquizzes.repositories;
 
 import com.mapquizzes.models.entities.FastestTimeEntity;
+import com.mapquizzes.models.entities.UserEntity;
 import com.mapquizzes.models.entities.compositekeys.FastestTimeId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,4 +30,6 @@ public interface FastestTimeRepository extends JpaRepository<FastestTimeEntity, 
                 order by q.name
             """, nativeQuery = true)
     List<Object[]> findUserRankings(@Param("userId") Integer userId);
+
+    void deleteAllByUser(UserEntity user);
 }

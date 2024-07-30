@@ -13,4 +13,6 @@ public interface MistakeRepository extends JpaRepository<MistakeEntity, MistakeI
     List<MistakeEntity> getAllByUser(UserEntity user);
 
     void deleteByQuestionIdAndUser(Integer questionId, UserEntity user);
+
+    void deleteAllByUser(UserEntity user);
 }

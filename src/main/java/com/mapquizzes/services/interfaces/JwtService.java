@@ -7,9 +7,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.function.Function;
 
 public interface JwtService {
-    boolean isAccessTokenValid(String token, UserDetails user);
+    boolean isTokenValid(String token, UserDetails user);
 
-    boolean isRefreshTokenValid(String token, UserDetails user);
+    boolean isAccessTokenBlacklisted(String token);
+
+    boolean isRefreshTokenBlacklisted(String token);
 
     String extractUsername(String token);
 

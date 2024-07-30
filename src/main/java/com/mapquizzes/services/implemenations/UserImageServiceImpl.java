@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -68,6 +69,12 @@ public class UserImageServiceImpl implements UserImageService {
             return new PrincipalCertificateImageDto(bytes, extension);
         };
         return getPrincipalImage(principal, func);
+    }
+
+    @Transactional
+    @Override
+    public void deleteByUser(UserEntity user) {
+        imageRepo.deleteByUser(user);
     }
 
     private <R> R getPrincipalImage(Principal principal, BiFunction<String, byte[], R> func) {

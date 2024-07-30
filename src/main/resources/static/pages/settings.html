@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Settings</title>
+  <link rel="stylesheet" href="../css/settings.css">
+</head>
+<body>
+<div id="content">
+  <div class="profile-container">
+    <div class="profile-header">
+      <h2>User Settings</h2>
+    </div>
+    <form id="username-form">
+      <div class="form-group">
+        <label for="username">New Username:</label>
+        <input type="text" id="username" name="username" required>
+        <div class="error-message" id="username-error"></div>
+      </div>
+      <button type="submit">Change Username</button>
+    </form>
+    <form id="password-form">
+      <div class="form-group">
+        <label for="password">New Password:</label>
+        <input type="password" id="password" name="password" required>
+        <div class="error-message" id="password-error"></div>
+      </div>
+      <button type="submit">Change Password</button>
+    </form>
+    <button id="delete-account">Delete My Account</button>
+  </div>
+</div>
+<div id="popup" class="popup">
+  <div class="popup-content">
+    <p id="popup-message"></p>
+    <button id="popup-close">Close</button>
+    <button id="popup-confirm" style="display: none;">Confirm</button>
+  </div>
+</div>
+</body>
+</html>

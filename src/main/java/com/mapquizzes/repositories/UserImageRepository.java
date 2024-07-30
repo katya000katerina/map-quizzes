@@ -13,4 +13,6 @@ public interface UserImageRepository extends JpaRepository<UserImageEntity, Inte
 
     @Query("select i.id from UserImageEntity i where i.user = :user")
     Optional<Integer> getIdByUser(UserEntity user);
+
+    void deleteByUser(UserEntity user);
 }

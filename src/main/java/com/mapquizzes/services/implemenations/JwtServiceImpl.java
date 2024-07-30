@@ -1,8 +1,8 @@
 package com.mapquizzes.services.implemenations;
 
 import com.mapquizzes.models.entities.UserEntity;
-import com.mapquizzes.services.interfaces.JwtService;
 import com.mapquizzes.repositories.TokenBlacklistRepository;
+import com.mapquizzes.services.interfaces.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -28,25 +28,18 @@ public class JwtServiceImpl implements JwtService {
     private long refreshTokenExpTime;
 
     @Override
-    public boolean isAccessTokenValid(String token, UserDetails user) {
-        return isTokenValid(token, user) && !isAccessTokenBlacklisted(token);
-    }
-
-    @Override
-    public boolean isRefreshTokenValid(String token, UserDetails user) {
-        return isTokenValid(token, user) && !isRefreshTokenBlacklisted(token);
-    }
-
-    private boolean isTokenValid(String token, UserDetails user) {
+    public boolean isTokenValid(String token, UserDetails user) {
         String username = extractUsername(token);
         return (username.equals(user.getUsername())) && !isTokenExpired(token);
     }
 
-    private boolean isAccessTokenBlacklisted(String token) {
+    @Override
+    public boolean isAccessTokenBlacklisted(String token) {
         return blacklistRepository.getBlacklistedAccessToken(token) != null;
     }
 
-    private boolean isRefreshTokenBlacklisted(String token) {
+    @Override
+    public boolean isRefreshTokenBlacklisted(String token) {
         return blacklistRepository.getBlacklistedRefreshToken(token) != null;
     }
 

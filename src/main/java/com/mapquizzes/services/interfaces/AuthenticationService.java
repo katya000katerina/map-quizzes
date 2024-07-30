@@ -10,6 +10,8 @@ public interface AuthenticationService {
     @Transactional
     AuthenticationDto signUp(UserDto userDto);
 
+    void setEncodedPassword(UserEntity userEntity, String passwordToEncode);
+
     AuthenticationDto signIn(UserDto userDto);
 
     AuthenticationDto refreshToken(HttpServletRequest request);

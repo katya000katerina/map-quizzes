@@ -59,6 +59,12 @@ const routes = {
         title: 'My profile',
         script: '/js/my_profile.js',
         access: Access.authorized
+    },
+    '/settings': {
+        page: '/pages/settings.html',
+        title: 'My profile',
+        script: '/js/settings.js',
+        access: Access.authorized
     }
 };
 
