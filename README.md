@@ -15,7 +15,7 @@ The project has implemented core functionality including user authentication, in
 ### Implemented
 - RESTful API using Spring Boot with frontend integration
 - Interactive physical map quizzes (mountains of the world and volcanoes of the world)
-- User account creation and management
+- User account creation and management (change username, change password, delete account)
 - JWT authentication for secure access
 - User ranking system based on quiz completion time
 - Personalized quizzes for registered users focusing on previously incorrect answers
@@ -24,7 +24,6 @@ The project has implemented core functionality including user authentication, in
 
 ### Planned
 - Home page implementation
-- Settings page (change username, change password, delete account)
 - Comprehensive testing suite
 
 ## Technology Stack
