@@ -1,6 +1,5 @@
 package com.mapquizzes.utils;
 
-import com.mapquizzes.exceptions.custom.NoCookiesReceivedException;
 import com.mapquizzes.models.dto.TokensDto;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +24,7 @@ public final class CookieTokenUtils {
         Cookie[] cookies = request.getCookies();
 
         if (cookies == null || cookies.length == 0) {
-            throw new NoCookiesReceivedException();
+            return new Cookie[]{};
         }
 
         return cookies;
