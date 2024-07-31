@@ -44,7 +44,7 @@ The project has implemented core functionality including user authentication, in
 - Database: PostgreSQL, Redis
 - Build Tool: Maven
 - Testing: JUnit 5
-- Additional Libraries: Lombok, Apache PDFBox
+- Additional Libraries: Lombok, JJWT, MapStruct, Apache PDFBox 
 ---
 
 **Note to potential users:**
