@@ -1,6 +1,6 @@
 package com.mapquizzes.controllers;
 
-import com.mapquizzes.exceptions.custom.InvalidIdException;
+import com.mapquizzes.exceptions.custom.badrequest.InvalidIdException;
 import com.mapquizzes.models.dto.QuizDto;
 import com.mapquizzes.services.interfaces.QuizQuestionService;
 import org.junit.jupiter.api.Test;

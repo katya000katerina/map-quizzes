@@ -1,9 +1,8 @@
 package com.mapquizzes.exceptions;
 
-import com.mapquizzes.exceptions.custom.EntityNotFoundException;
-import com.mapquizzes.exceptions.custom.InvalidIdException;
-import com.mapquizzes.exceptions.custom.NullIdException;
-import com.mapquizzes.exceptions.custom.RefreshTokenException;
+import com.mapquizzes.exceptions.custom.badrequest.SimpleCustomBadRequestException;
+import com.mapquizzes.exceptions.custom.internalservererror.SimpleCustomInternalServerException;
+import com.mapquizzes.exceptions.custom.unauthorized.SimpleCustomUnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -17,13 +16,8 @@ import java.util.Objects;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(RefreshTokenException.class)
-    public ResponseEntity<ApiError> handleRefreshTokenException(RefreshTokenException ex) {
-        return buildResponseEntity(new ApiError(HttpStatus.UNAUTHORIZED, ex.getMessage()));
-    }
-
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ApiError> handleAuthenticationException(AuthenticationException ex) {
+    public ResponseEntity<ApiError> handleAuthenticationException() {
         return buildResponseEntity(new ApiError(HttpStatus.UNAUTHORIZED, "Invalid user credentials"));
     }
 
@@ -39,13 +33,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(apiError);
     }
 
-    @ExceptionHandler(InvalidIdException.class)
-    public ResponseEntity<ApiError> InvalidIdException(InvalidIdException ex) {
+    @ExceptionHandler(SimpleCustomUnauthorizedException.class)
+    public ResponseEntity<ApiError> handleRefreshTokenException(SimpleCustomUnauthorizedException ex) {
+        return buildResponseEntity(new ApiError(HttpStatus.UNAUTHORIZED, ex.getMessage()));
+    }
+
+    @ExceptionHandler(SimpleCustomBadRequestException.class)
+    public ResponseEntity<ApiError> handleBadRequestException(SimpleCustomBadRequestException ex) {
         return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
     }
 
-    @ExceptionHandler({EntityNotFoundException.class, NullIdException.class})
-    public ResponseEntity<ApiError> handleInternalError(RuntimeException ex) {
+    @ExceptionHandler(SimpleCustomInternalServerException.class)
+    public ResponseEntity<ApiError> handleInternalServerException(SimpleCustomInternalServerException ex) {
         return buildResponseEntity(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()));
     }
 

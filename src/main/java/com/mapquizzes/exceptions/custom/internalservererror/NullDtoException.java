@@ -1,6 +1,6 @@
-package com.mapquizzes.exceptions.custom;
+package com.mapquizzes.exceptions.custom.internalservererror;
 
-public class NullDtoException extends RuntimeException{
+public class NullDtoException extends SimpleCustomInternalServerException{
     public NullDtoException() {
         super("DTO is null");
     }

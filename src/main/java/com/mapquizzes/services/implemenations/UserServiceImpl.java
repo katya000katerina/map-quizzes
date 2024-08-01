@@ -1,6 +1,6 @@
 package com.mapquizzes.services.implemenations;
 
-import com.mapquizzes.exceptions.custom.EntityNotFoundException;
+import com.mapquizzes.exceptions.custom.internalservererror.EntityNotFoundException;
 import com.mapquizzes.models.dto.AuthenticationDto;
 import com.mapquizzes.models.dto.UserDto;
 import com.mapquizzes.models.entities.UserEntity;

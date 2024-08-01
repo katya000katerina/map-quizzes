@@ -1,6 +1,6 @@
-package com.mapquizzes.exceptions.custom;
+package com.mapquizzes.exceptions.custom.badrequest;
 
-public class InvalidIdException extends RuntimeException{
+public class InvalidIdException extends SimpleCustomBadRequestException {
     public InvalidIdException() {
         super("Invalid id");
     }

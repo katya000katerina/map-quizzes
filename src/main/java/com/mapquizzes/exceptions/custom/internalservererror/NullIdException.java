@@ -1,6 +1,6 @@
-package com.mapquizzes.exceptions.custom;
+package com.mapquizzes.exceptions.custom.internalservererror;
 
-public class NullIdException extends RuntimeException{
+public class NullIdException extends SimpleCustomInternalServerException{
     public NullIdException() {
         super("Id is null");
     }

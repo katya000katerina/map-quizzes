@@ -1,6 +1,6 @@
 package com.mapquizzes.services.implemenations;
 
-import com.mapquizzes.exceptions.custom.NullIdException;
+import com.mapquizzes.exceptions.custom.internalservererror.NullIdException;
 import com.mapquizzes.models.dto.GlobalRankingDto;
 import com.mapquizzes.models.dto.PrincipalRankingDto;
 import com.mapquizzes.models.mapping.mappers.FastestTimeMapper;

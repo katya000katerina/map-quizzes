@@ -1,6 +1,6 @@
-package com.mapquizzes.exceptions.custom;
+package com.mapquizzes.exceptions.custom.internalservererror;
 
-public class EntityNotFoundException extends RuntimeException {
+public class EntityNotFoundException extends SimpleCustomInternalServerException {
     public EntityNotFoundException() {
         super("Entity not found");
     }

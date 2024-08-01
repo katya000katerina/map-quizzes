@@ -1,7 +1,7 @@
 package com.mapquizzes.services.implemenations;
 
-import com.mapquizzes.exceptions.custom.EntityNotFoundException;
-import com.mapquizzes.exceptions.custom.NullIdException;
+import com.mapquizzes.exceptions.custom.internalservererror.EntityNotFoundException;
+import com.mapquizzes.exceptions.custom.internalservererror.NullIdException;
 import com.mapquizzes.models.dto.QuizDto;
 import com.mapquizzes.models.entities.QuizEntity;
 import com.mapquizzes.models.mapping.mappers.QuizMapper;

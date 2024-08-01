@@ -1,6 +1,6 @@
 package com.mapquizzes.services.implemenations;
 
-import com.mapquizzes.exceptions.custom.NullDtoException;
+import com.mapquizzes.exceptions.custom.internalservererror.NullDtoException;
 import com.mapquizzes.models.dto.MistakeDto;
 import com.mapquizzes.models.dto.PrincipalQuizMistakesDto;
 import com.mapquizzes.models.entities.MistakeEntity;
