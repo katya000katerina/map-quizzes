@@ -28,6 +28,6 @@ public class UserImageRestController {
             return ResponseEntity.badRequest().build();
         }
         PrincipalProfileImageDto dto = service.saveOrUpdate(file, principal);
-        return new ResponseEntity<>(dto.bytes(), dto.headers(), HttpStatus.OK);
+        return new ResponseEntity<>(dto.bytes(), dto.headers(), HttpStatus.ACCEPTED);
     }
 }
