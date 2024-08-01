@@ -27,18 +27,8 @@ class QuizQuestionsRestControllerTest extends BaseControllerTest {
     private String errorMessage;
 
     private void setupOk() {
-        quiz = generateQuizDto();
+        quiz = TestDataFactory.createQuizDto();
         quizId = quiz.id();
-    }
-
-    private QuizDto generateQuizDto() {
-        QuizDto.QuestionDto question1 = new QuizDto.QuestionDto(1, "Caspian Sea");
-        QuizDto.QuestionDto question2 = new QuizDto.QuestionDto(2, "Victoria");
-        QuizDto.QuestionDto question3 = new QuizDto.QuestionDto(3, "Huron");
-        return new QuizDto(6, "Lakes of the world",
-                new ArrayList<>(
-                        Arrays.asList(question1, question2, question3)
-                ));
     }
 
     private void setupBadRequest() {
@@ -104,5 +94,17 @@ class QuizQuestionsRestControllerTest extends BaseControllerTest {
         mockMvc.perform(get(path))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedJson));
+    }
+
+    private static class TestDataFactory {
+        static QuizDto createQuizDto() {
+            QuizDto.QuestionDto question1 = new QuizDto.QuestionDto(1, "Caspian Sea");
+            QuizDto.QuestionDto question2 = new QuizDto.QuestionDto(2, "Victoria");
+            QuizDto.QuestionDto question3 = new QuizDto.QuestionDto(3, "Huron");
+            return new QuizDto(6, "Lakes of the world",
+                    new ArrayList<>(
+                            Arrays.asList(question1, question2, question3)
+                    ));
+        }
     }
 }
