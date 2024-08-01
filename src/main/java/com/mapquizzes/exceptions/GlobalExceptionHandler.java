@@ -1,6 +1,7 @@
 package com.mapquizzes.exceptions;
 
 import com.mapquizzes.exceptions.custom.EntityNotFoundException;
+import com.mapquizzes.exceptions.custom.InvalidIdException;
 import com.mapquizzes.exceptions.custom.NullIdException;
 import com.mapquizzes.exceptions.custom.RefreshTokenException;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,11 @@ public class GlobalExceptionHandler {
                 .toList();
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Validation error", errors);
         return ResponseEntity.badRequest().body(apiError);
+    }
+
+    @ExceptionHandler(InvalidIdException.class)
+    public ResponseEntity<ApiError> InvalidIdException(InvalidIdException ex) {
+        return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage()));
     }
 
     @ExceptionHandler({EntityNotFoundException.class, NullIdException.class})

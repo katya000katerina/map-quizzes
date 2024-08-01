@@ -2,6 +2,7 @@ package com.mapquizzes.services.implemenations;
 
 import com.mapquizzes.config.CacheConfig;
 import com.mapquizzes.exceptions.custom.EntityNotFoundException;
+import com.mapquizzes.exceptions.custom.InvalidIdException;
 import com.mapquizzes.exceptions.custom.NullIdException;
 import com.mapquizzes.models.dto.QuizDto;
 import com.mapquizzes.models.entities.QuizEntity;
@@ -27,9 +28,8 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
     @Override
     @Cacheable(value = CacheConfig.QUIZ_QUESTION_CACHE_NAME, unless = "#result == null")
     public QuizDto getQuizByIdWithQuestions(Integer quizId) {
-        if (quizId == null) {
-            throw new NullIdException("Quiz id is null");
-        }
+        checkQuizId(quizId);
+
         QuizEntity entity = quizRepo.findById(quizId)
                 .orElseThrow(() -> {
                     throw new EntityNotFoundException(String.format("Quiz with id=%d was not found", quizId));
@@ -40,9 +40,8 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
 
     @Override
     public QuizDto getMistakesQuizByIdWithQuestions(Integer quizId, Principal principal) {
-        if (quizId == null) {
-            throw new NullIdException("Quiz id is null");
-        }
+        checkQuizId(quizId);
+
         if (principal == null) {
             throw new IllegalArgumentException("Principal is null");
         }
@@ -55,5 +54,14 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
                 });
 
         return mapper.mapEntityToDto(entity);
+    }
+
+    private void checkQuizId(Integer quizId) {
+        if (quizId == null) {
+            throw new NullIdException("Quiz id is null");
+        }
+        if (!quizRepo.existsById(quizId)) {
+            throw new InvalidIdException(String.format("Quiz with id=%d doesn't exist", quizId));
+        }
     }
 }
