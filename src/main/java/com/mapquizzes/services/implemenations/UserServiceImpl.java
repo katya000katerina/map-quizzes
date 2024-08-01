@@ -41,7 +41,9 @@ public class UserServiceImpl implements UserService {
         UserEntity entity = getEntityByPrincipal(principal);
         entity.setUsername(dto.username());
         entity = userRepo.save(entity);
-        return authService.getNewTokensForPrincipal(entity, request);
+        AuthenticationDto authDto = authService.getNewTokensForPrincipal(entity, request);
+        authDto.setUserDto(mapper.mapEntityToDto(entity));
+        return authDto;
     }
 
     @Transactional
