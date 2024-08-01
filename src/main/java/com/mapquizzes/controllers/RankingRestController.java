@@ -23,7 +23,7 @@ public class RankingRestController {
     private final RankingService rankingService;
 
     @GetMapping
-    public ResponseEntity<Page<GlobalRankingDto>> getByQuizIdWithUserSortedByTimeAsc(@RequestParam("quiz-id") Integer quizId,
+    public ResponseEntity<Page<GlobalRankingDto>> getByQuizIdWithUser(@RequestParam("quiz-id") Integer quizId,
                                                                                      Pageable pageable) {
         return ResponseEntity.ok(rankingService.getRankingByQuizId(quizId, pageable));
     }
