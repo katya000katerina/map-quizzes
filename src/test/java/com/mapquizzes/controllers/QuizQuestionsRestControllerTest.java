@@ -59,26 +59,19 @@ class QuizQuestionsRestControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser
-    void testGetMistakesQuizWithQuestions_ReturnsOkAndExpectedJson() throws Exception {
-        setupOk();
-        when(service.getMistakesQuizByIdWithQuestions(eq(quizId), any(Principal.class))).thenReturn(quiz);
-        performGetReturnsOkAndExpectedJson("/api/v1/quizzes-questions/" + quizId + "/mistakes");
-    }
-
-    private void performGetReturnsOkAndExpectedJson(String url) throws Exception {
-        String expectedJson = objectMapper.writeValueAsString(quiz);
-        mockMvc.perform(get(url))
-                .andExpect(status().isOk())
-                .andExpect(content().json(expectedJson));
-    }
-
-    @Test
     void testGetQuizWithQuestions_ReturnsBadRequestAndApiErrorJson() throws Exception {
         setupBadRequest();
         when(service.getQuizByIdWithQuestions(invalidId))
                 .thenThrow(new InvalidIdException(errorMessage));
         performGetReturnsBadRequestAndApiErrorJson("/api/v1/quizzes-questions/" + invalidId);
+    }
+
+    @Test
+    @WithMockUser
+    void testGetMistakesQuizWithQuestions_ReturnsOkAndExpectedJson() throws Exception {
+        setupOk();
+        when(service.getMistakesQuizByIdWithQuestions(eq(quizId), any(Principal.class))).thenReturn(quiz);
+        performGetReturnsOkAndExpectedJson("/api/v1/quizzes-questions/" + quizId + "/mistakes");
     }
 
     @Test
@@ -90,8 +83,15 @@ class QuizQuestionsRestControllerTest extends BaseControllerTest {
         performGetReturnsBadRequestAndApiErrorJson("/api/v1/quizzes-questions/" + invalidId + "/mistakes");
     }
 
-    private void performGetReturnsBadRequestAndApiErrorJson(String url) throws Exception {
-        mockMvc.perform(get(url))
+    @Test
+    void testGetMistakesQuizWithQuestions_ReturnsUnauthorized() throws Exception {
+        setupUnauthorized();
+        mockMvc.perform(get("/api/v1/quizzes-questions/" + quizId + "/mistakes"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    private void performGetReturnsBadRequestAndApiErrorJson(String path) throws Exception {
+        mockMvc.perform(get(path))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.httpStatus")
                         .value("BAD_REQUEST"))
@@ -99,10 +99,10 @@ class QuizQuestionsRestControllerTest extends BaseControllerTest {
                         .value(errorMessage));
     }
 
-    @Test
-    void testGetMistakesQuizWithQuestions_ReturnsUnauthorized() throws Exception {
-        setupUnauthorized();
-        mockMvc.perform(get("/api/v1/quizzes-questions/" + quizId + "/mistakes"))
-                .andExpect(status().isUnauthorized());
+    private void performGetReturnsOkAndExpectedJson(String path) throws Exception {
+        String expectedJson = objectMapper.writeValueAsString(quiz);
+        mockMvc.perform(get(path))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedJson));
     }
 }
