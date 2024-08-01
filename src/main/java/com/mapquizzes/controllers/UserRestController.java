@@ -8,6 +8,7 @@ import com.mapquizzes.validation.groups.user.ChangePassword;
 import com.mapquizzes.validation.groups.user.ChangeUsername;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,18 +27,18 @@ public class UserRestController {
         return ResponseEntity.ok(userService.getDtoByPrincipal(principal));
     }
 
-    @PostMapping("/username")
-    public ResponseEntity<AuthenticationDto> changeUsername(@Validated(ChangeUsername.class) @RequestBody UserDto user,
+    @PatchMapping("/username")
+    public ResponseEntity<UserDto> changeUsername(@Validated(ChangeUsername.class) @RequestBody UserDto user,
                                                             Principal principal,
                                                             HttpServletRequest request) {
         AuthenticationDto authDto = userService.changeUsername(user, principal, request);
         return ResponseEntity
-                .ok()
+                .status(HttpStatus.ACCEPTED)
                 .headers(authDto.getTokenCookiesHeaders())
-                .build();
+                .body(authDto.getUserDto());
     }
 
-    @PostMapping("/password")
+    @PatchMapping("/password")
     public ResponseEntity<UserDto> changePassword(@Validated(ChangePassword.class) @RequestBody UserDto user,
                                                   Principal principal) {
         return ResponseEntity.ok(userService.changePassword(user, principal));

@@ -28,7 +28,7 @@ function handlePasswordChange(event) {
 
 function sendRequest(url, data) {
     fetchWithAuth(url, {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
         },
