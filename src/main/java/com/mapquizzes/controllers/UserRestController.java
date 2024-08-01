@@ -41,7 +41,9 @@ public class UserRestController {
     @PatchMapping("/password")
     public ResponseEntity<UserDto> changePassword(@Validated(ChangePassword.class) @RequestBody UserDto user,
                                                   Principal principal) {
-        return ResponseEntity.ok(userService.changePassword(user, principal));
+        return ResponseEntity
+                .accepted()
+                .body(userService.changePassword(user, principal));
     }
 
     @DeleteMapping("/current")
