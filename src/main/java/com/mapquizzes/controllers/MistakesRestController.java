@@ -34,7 +34,7 @@ public class MistakesRestController {
     public ResponseEntity<Void> deleteByQuestionIdAndPrincipal(@RequestParam("question-id") Integer questionId,
                                                                Principal principal) {
         mistakeService.deleteByQuestionIdAndPrincipal(questionId, principal);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }
