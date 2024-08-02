@@ -112,7 +112,7 @@ function checkAnswer(answer) {
     if (questions[randomNumber].question === answer) {
         if (wasWrongAnswer) {
             if (isUserAuth) {
-                updateMistakes();
+                saveOrupdateMistakes();
             }
             ++notFirstTryAnswersCount;
             wasWrongAnswer = false;
@@ -141,11 +141,11 @@ function checkAnswer(answer) {
     }
 }
 
-function updateMistakes() {
+function saveOrupdateMistakes() {
     const path = '/api/v1/mistakes';
     const mistake = {questionId: questions[randomNumber].id, numberOfMistakes: mistakesCount};
     const requestInit = {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
         },

@@ -17,7 +17,7 @@ import java.util.List;
 public class MistakesRestController {
     private final MistakeService mistakeService;
 
-    @PutMapping
+    @PatchMapping
     public ResponseEntity<MistakeDto> saveOrUpdate(@Valid @RequestBody MistakeDto dto,
                                                    Principal principal) {
         return ResponseEntity.accepted()
