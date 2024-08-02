@@ -5,7 +5,6 @@ import com.mapquizzes.models.dto.PrincipalQuizMistakesDto;
 import com.mapquizzes.services.interfaces.MistakeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +18,9 @@ public class MistakesRestController {
     private final MistakeService mistakeService;
 
     @PutMapping
-    public ResponseEntity<Void> saveOrUpdate(@Valid @RequestBody MistakeDto dto,
-                                             Principal principal) {
-        mistakeService.saveOrUpdate(dto, principal);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<MistakeDto> saveOrUpdate(@Valid @RequestBody MistakeDto dto,
+                                                   Principal principal) {
+        return ResponseEntity.ok(mistakeService.saveOrUpdate(dto, principal));
     }
 
     @GetMapping("/current")
@@ -33,7 +31,7 @@ public class MistakesRestController {
 
     @DeleteMapping
     public ResponseEntity<Void> deleteByQuestionIdAndPrincipal(@RequestParam("question-id") Integer questionId,
-                                                                      Principal principal) {
+                                                               Principal principal) {
         mistakeService.deleteByQuestionIdAndPrincipal(questionId, principal);
         return ResponseEntity.ok().build();
     }

@@ -28,7 +28,7 @@ public class MistakeServiceImpl implements MistakeService {
 
     @Transactional
     @Override
-    public void saveOrUpdate(MistakeDto dto, Principal principal) {
+    public MistakeDto saveOrUpdate(MistakeDto dto, Principal principal) {
         if (dto == null) {
             throw new NullDtoException("MistakeDto is null");
         }
@@ -47,7 +47,8 @@ public class MistakeServiceImpl implements MistakeService {
         } else {
             mistakeEntity = new MistakeEntity(userEntity, questionEntity, dto.numberOfMistakes());
         }
-        mistakeRepo.save(mistakeEntity);
+        mistakeEntity = mistakeRepo.save(mistakeEntity);
+        return new MistakeDto(mistakeEntity.getQuestion().getId(), mistakeEntity.getNumberOfMistakes());
     }
 
     @Transactional

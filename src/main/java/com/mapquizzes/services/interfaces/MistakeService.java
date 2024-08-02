@@ -8,7 +8,7 @@ import java.security.Principal;
 import java.util.List;
 
 public interface MistakeService {
-    void saveOrUpdate(MistakeDto dto, Principal principal);
+    MistakeDto saveOrUpdate(MistakeDto dto, Principal principal);
     List<PrincipalQuizMistakesDto> getMistakesForPrincipal(Principal principal);
 
     void deleteByQuestionIdAndPrincipal(Integer questionId, Principal principal);
