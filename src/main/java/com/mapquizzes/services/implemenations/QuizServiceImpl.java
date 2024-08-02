@@ -1,5 +1,6 @@
 package com.mapquizzes.services.implemenations;
 
+import com.mapquizzes.exceptions.custom.badrequest.InvalidIdException;
 import com.mapquizzes.exceptions.custom.internalservererror.EntityNotFoundException;
 import com.mapquizzes.exceptions.custom.internalservererror.NullIdException;
 import com.mapquizzes.models.dto.QuizDto;
@@ -21,9 +22,8 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public QuizEntity getEntityById(Integer id) {
-        if (id == null) {
-            throw new NullIdException("Quiz id is null");
-        }
+        checkQuizId(id);
+
         return quizRepo.findById(id).orElseThrow(() -> {
             throw new EntityNotFoundException(String.format("Quiz with id=%d was not found", id));
         });
@@ -37,5 +37,14 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public Stream<QuizDto> getAllDto() {
         return quizRepo.findAll().stream().map(mapper::mapEntityToDto).sorted(Comparator.comparing(QuizDto::id));
+    }
+
+    private void checkQuizId(Integer quizId) {
+        if (quizId == null) {
+            throw new NullIdException("Quiz id is null");
+        }
+        if (!quizRepo.existsById(quizId)) {
+            throw new InvalidIdException(String.format("Quiz with id=%d doesn't exist", quizId));
+        }
     }
 }
