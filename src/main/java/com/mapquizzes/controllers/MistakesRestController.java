@@ -20,7 +20,8 @@ public class MistakesRestController {
     @PutMapping
     public ResponseEntity<MistakeDto> saveOrUpdate(@Valid @RequestBody MistakeDto dto,
                                                    Principal principal) {
-        return ResponseEntity.ok(mistakeService.saveOrUpdate(dto, principal));
+        return ResponseEntity.accepted()
+                .body(mistakeService.saveOrUpdate(dto, principal));
     }
 
     @GetMapping("/current")
