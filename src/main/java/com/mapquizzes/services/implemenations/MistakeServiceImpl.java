@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +65,7 @@ public class MistakeServiceImpl implements MistakeService {
         mistakeRepo.deleteByQuestionIdAndUser(questionId, user);
     }
 
-    public List<PrincipalQuizMistakesDto> getMistakesForPrincipal(Principal principal) {
+    public Stream<PrincipalQuizMistakesDto> getMistakesForPrincipal(Principal principal) {
         UserEntity user = userService.getEntityByPrincipal(principal);
 
         List<MistakeEntity> mistakes = mistakeRepo.getAllByUser(user);
@@ -86,6 +87,6 @@ public class MistakeServiceImpl implements MistakeService {
             quizMistakes.mistakes().add(principalMistakeDto);
         }
 
-        return new ArrayList<>(quizMistakesMap.values());
+        return quizMistakesMap.values().stream();
     }
 }

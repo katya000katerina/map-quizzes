@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/mistakes")
@@ -26,7 +27,7 @@ public class MistakesRestController {
 
     @GetMapping("/current")
     public ResponseEntity<List<PrincipalQuizMistakesDto>> getMistakesForPrincipal(Principal principal) {
-        List<PrincipalQuizMistakesDto> mistakes = mistakeService.getMistakesForPrincipal(principal);
+        List<PrincipalQuizMistakesDto> mistakes = mistakeService.getMistakesForPrincipal(principal).collect(Collectors.toList());
         return ResponseEntity.ok(mistakes);
     }
 
