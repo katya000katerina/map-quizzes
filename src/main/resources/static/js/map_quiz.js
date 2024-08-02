@@ -164,7 +164,7 @@ function updateTime(millis) {
     const path = '/api/v1/fastest-time';
     const time = {quizId: quizId, timeInMillis: millis};
     const requestInit = {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
         },

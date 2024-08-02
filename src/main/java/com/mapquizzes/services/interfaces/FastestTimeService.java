@@ -6,7 +6,7 @@ import com.mapquizzes.models.entities.UserEntity;
 import java.security.Principal;
 
 public interface FastestTimeService {
-    void saveOrUpdate(TestCompletionTimeDto dto, Principal principal);
+    TestCompletionTimeDto saveOrUpdate(TestCompletionTimeDto dto, Principal principal);
 
     void deleteAllByUser(UserEntity entity);
 }

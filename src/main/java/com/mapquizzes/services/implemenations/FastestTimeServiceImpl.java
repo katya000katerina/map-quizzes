@@ -6,6 +6,7 @@ import com.mapquizzes.models.entities.FastestTimeEntity;
 import com.mapquizzes.models.entities.QuizEntity;
 import com.mapquizzes.models.entities.UserEntity;
 import com.mapquizzes.models.entities.compositekeys.FastestTimeId;
+import com.mapquizzes.models.mapping.mappers.FastestTimeMapper;
 import com.mapquizzes.repositories.FastestTimeRepository;
 import com.mapquizzes.services.interfaces.FastestTimeService;
 import com.mapquizzes.services.interfaces.QuizService;
@@ -23,10 +24,11 @@ public class FastestTimeServiceImpl implements FastestTimeService {
     private final FastestTimeRepository fastestTimeRepo;
     private final UserService userService;
     private final QuizService quizService;
+    private final FastestTimeMapper mapper;
 
     @Transactional
     @Override
-    public void saveOrUpdate(TestCompletionTimeDto dto, Principal principal) {
+    public TestCompletionTimeDto saveOrUpdate(TestCompletionTimeDto dto, Principal principal) {
         if (dto == null) {
             throw new NullDtoException("TestCompletionTimeDto is null");
         }
@@ -39,10 +41,18 @@ public class FastestTimeServiceImpl implements FastestTimeService {
         Optional<FastestTimeEntity> currEntityOp = fastestTimeRepo.findById(new FastestTimeId(userEntity, quizEntity));
 
         Integer timeInMillis = dto.timeInMillis();
-        if (currEntityOp.isEmpty() || currEntityOp.get().getTimeInMillis() > timeInMillis) {
-            FastestTimeEntity entity = new FastestTimeEntity(userEntity, quizEntity, timeInMillis);
-            fastestTimeRepo.save(entity);
+        FastestTimeEntity entity;
+        if (currEntityOp.isPresent()) {
+            entity = currEntityOp.get();
+            if (entity.getTimeInMillis() > timeInMillis) {
+                entity.setTimeInMillis(timeInMillis);
+                entity = fastestTimeRepo.save(entity);
+            }
+        } else {
+            entity = new FastestTimeEntity(userEntity, quizEntity, timeInMillis);
+            entity = fastestTimeRepo.save(entity);
         }
+        return mapper.mapEntityToTestCompletionTimeDto(entity);
     }
 
     @Transactional
