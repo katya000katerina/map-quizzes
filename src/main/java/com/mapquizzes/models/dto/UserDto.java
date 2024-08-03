@@ -1,5 +1,6 @@
 package com.mapquizzes.models.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mapquizzes.validation.annotations.UniqueUsername;
 import com.mapquizzes.validation.groups.user.ChangePassword;
@@ -19,6 +20,7 @@ public record UserDto(Integer id,
                               groups = {SignIn.class, SignUp.class, ChangePassword.class})
                       @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
                       String password,
+                      @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss z", timezone = "Europe/Moscow")
                       OffsetDateTime createdAt) {
     @Override
     public String toString() {
