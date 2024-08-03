@@ -24,14 +24,15 @@ public class UserRestController {
 
     @GetMapping("/current")
     public ResponseEntity<UserDto> getSignedInUser(Principal principal) {
-        return ResponseEntity.ok(userService.getDtoByPrincipal(principal));
+        UserDto userDto = userService.getDtoByPrincipal(principal);
+        return ResponseEntity.ok(userDto);
     }
 
     @PatchMapping("/username")
-    public ResponseEntity<UserDto> changeUsername(@Validated(ChangeUsername.class) @RequestBody UserDto user,
+    public ResponseEntity<UserDto> changeUsername(@Validated(ChangeUsername.class) @RequestBody UserDto userDto,
                                                             Principal principal,
                                                             HttpServletRequest request) {
-        AuthenticationDto authDto = userService.changeUsername(user, principal, request);
+        AuthenticationDto authDto = userService.changeUsername(userDto, principal, request);
         return ResponseEntity
                 .status(HttpStatus.ACCEPTED)
                 .headers(authDto.getTokenCookiesHeaders())
@@ -41,9 +42,10 @@ public class UserRestController {
     @PatchMapping("/password")
     public ResponseEntity<UserDto> changePassword(@Validated(ChangePassword.class) @RequestBody UserDto user,
                                                   Principal principal) {
+        UserDto userDto = userService.changePassword(user, principal);
         return ResponseEntity
                 .accepted()
-                .body(userService.changePassword(user, principal));
+                .body(userDto);
     }
 
     @DeleteMapping("/current")

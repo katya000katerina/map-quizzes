@@ -19,10 +19,10 @@ public class FastestTimeRestController {
     private final FastestTimeService fastestTimeService;
 
     @PatchMapping
-    public ResponseEntity<TestCompletionTimeDto> saveOrUpdate(@Valid @RequestBody TestCompletionTimeDto dto,
+    public ResponseEntity<TestCompletionTimeDto> saveOrUpdate(@Valid @RequestBody TestCompletionTimeDto complTimeDto,
                                                               Principal principal) {
         return ResponseEntity
                 .accepted()
-                .body(fastestTimeService.saveOrUpdate(dto, principal));
+                .body(fastestTimeService.saveOrUpdate(complTimeDto, principal));
     }
 }

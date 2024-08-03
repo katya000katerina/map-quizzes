@@ -16,17 +16,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class QuizRestController {
 
-    private final QuizService service;
+    private final QuizService quizService;
 
     @JsonView(QuizViews.WithoutQuestions.class)
     @GetMapping
     public ResponseEntity<List<QuizDto>> getAll() {
-        return ResponseEntity.ok(service.getAllDto().collect(Collectors.toList()));
+        List<QuizDto> quizzes = quizService.getAllDto().collect(Collectors.toList());
+        return ResponseEntity.ok(quizzes);
     }
 
     @JsonView(QuizViews.WithoutQuestions.class)
     @GetMapping("/{id}")
     public ResponseEntity<QuizDto> getById(@PathVariable Integer id) {
-        return ResponseEntity.ok(service.getDtoById(id));
+        QuizDto quizDto = quizService.getDtoById(id);
+        return ResponseEntity.ok(quizDto);
     }
 }

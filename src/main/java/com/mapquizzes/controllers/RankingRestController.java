@@ -25,11 +25,13 @@ public class RankingRestController {
     @GetMapping
     public ResponseEntity<Page<GlobalRankingDto>> getByQuizIdWithUsers(@RequestParam("quiz-id") Integer quizId,
                                                                                      Pageable pageable) {
-        return ResponseEntity.ok(rankingService.getRankingByQuizId(quizId, pageable));
+        Page<GlobalRankingDto> globalRankingPage = rankingService.getRankingByQuizId(quizId, pageable);
+        return ResponseEntity.ok(globalRankingPage);
     }
 
     @GetMapping("/current")
     public ResponseEntity<List<PrincipalRankingDto>> getByPrincipal(Principal principal) {
-        return ResponseEntity.ok(rankingService.getRankingByPrincipal(principal).collect(Collectors.toList()));
+        List<PrincipalRankingDto> principalRanking = rankingService.getRankingByPrincipal(principal).collect(Collectors.toList());
+        return ResponseEntity.ok(principalRanking);
     }
 }

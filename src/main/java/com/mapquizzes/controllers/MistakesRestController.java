@@ -19,10 +19,10 @@ public class MistakesRestController {
     private final MistakeService mistakeService;
 
     @PatchMapping
-    public ResponseEntity<MistakeDto> saveOrUpdate(@Valid @RequestBody MistakeDto dto,
+    public ResponseEntity<MistakeDto> saveOrUpdate(@Valid @RequestBody MistakeDto mistakeDto,
                                                    Principal principal) {
         return ResponseEntity.accepted()
-                .body(mistakeService.saveOrUpdate(dto, principal));
+                .body(mistakeService.saveOrUpdate(mistakeDto, principal));
     }
 
     @GetMapping("/current")

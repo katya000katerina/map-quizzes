@@ -18,17 +18,19 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class QuizQuestionsRestController {
 
-    private final QuizQuestionService service;
+    private final QuizQuestionService quizQuestionService;
 
     @JsonView(QuizViews.WithQuestions.class)
     @GetMapping("/{quizId}")
     public ResponseEntity<QuizDto> getQuizWithQuestions(@PathVariable Integer quizId) {
-        return ResponseEntity.ok(service.getQuizByIdWithQuestions(quizId));
+        QuizDto quizDto = quizQuestionService.getQuizByIdWithQuestions(quizId);
+        return ResponseEntity.ok(quizDto);
     }
 
     @JsonView(QuizViews.WithQuestions.class)
     @GetMapping("/{quizId}/mistakes")
     public ResponseEntity<QuizDto> getMistakesQuizWithQuestions(@PathVariable Integer quizId, Principal principal) {
-        return ResponseEntity.ok(service.getMistakesQuizByIdWithQuestions(quizId, principal));
+        QuizDto quizDto = quizQuestionService.getMistakesQuizByIdWithQuestions(quizId, principal);
+        return ResponseEntity.ok(quizDto);
     }
 }
