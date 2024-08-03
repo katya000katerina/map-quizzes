@@ -31,7 +31,7 @@ public class AuthenticationRestController {
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<UserDto> signIn(@Validated(SignIn.class) @RequestBody UserDto userDto) {
+    public ResponseEntity<Void> signIn(@Validated(SignIn.class) @RequestBody UserDto userDto) {
         AuthenticationDto authDto = authService.signIn(userDto);
         return ResponseEntity
                 .ok()
