@@ -35,8 +35,8 @@ public class UserImageServiceImpl implements UserImageService {
     public PrincipalProfileImageDto saveOrUpdate(MultipartFile file, Principal principal) {
         UserImageEntity image = new UserImageEntity();
 
-        UserEntity user = userService.getEntityByPrincipal(principal);
-        image.setUser(user);
+        UserEntity userEntity = userService.getEntityByPrincipal(principal);
+        image.setUser(userEntity);
 
         try {
             image.setBytes(file.getBytes());
@@ -46,7 +46,7 @@ public class UserImageServiceImpl implements UserImageService {
 
         String fileName = file.getOriginalFilename();
         image.setFileName(fileName);
-        imageRepo.getIdByUser(user).ifPresent(image::setId);
+        imageRepo.getIdByUser(userEntity).ifPresent(image::setId);
 
         byte[] bytes = imageRepo.save(image).getBytes();
 
@@ -73,16 +73,16 @@ public class UserImageServiceImpl implements UserImageService {
 
     @Transactional
     @Override
-    public void deleteByUser(UserEntity user) {
-        imageRepo.deleteByUser(user);
+    public void deleteByUser(UserEntity userEntity) {
+        imageRepo.deleteByUser(userEntity);
     }
 
     private <R> R getPrincipalImage(Principal principal, BiFunction<String, byte[], R> func) {
-        UserEntity user = userService.getEntityByPrincipal(principal);
-        Optional<UserImageEntity> optional = imageRepo.findByUser(user);
+        UserEntity userEntity = userService.getEntityByPrincipal(principal);
+        Optional<UserImageEntity> imageOptional = imageRepo.findByUser(userEntity);
 
-        if (optional.isPresent()) {
-            UserImageEntity image = optional.get();
+        if (imageOptional.isPresent()) {
+            UserImageEntity image = imageOptional.get();
             return func.apply(image.getFileName(), image.getBytes());
         } else {
             try {

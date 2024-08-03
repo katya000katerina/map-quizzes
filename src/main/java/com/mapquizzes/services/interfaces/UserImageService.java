@@ -13,5 +13,5 @@ public interface UserImageService {
 
     PrincipalProfileImageDto saveOrUpdate(MultipartFile file, Principal principal);
 
-    void deleteByUser(UserEntity entity);
+    void deleteByUser(UserEntity userEntity);
 }

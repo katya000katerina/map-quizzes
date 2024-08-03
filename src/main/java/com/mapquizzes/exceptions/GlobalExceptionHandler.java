@@ -53,7 +53,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SimpleCustomInternalServerException.class)
     public ResponseEntity<ApiError> handleInternalServerException(SimpleCustomInternalServerException ex) {
         logger.error(ex);
-        return buildResponseEntity(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage()));
+        return buildResponseEntity(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Internal server error. Try again later or contact customer support."));
     }
 
     private ResponseEntity<ApiError> buildResponseEntity(ApiError apiError) {

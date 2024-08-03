@@ -11,9 +11,9 @@ public interface UserService {
     UserDto getDtoByPrincipal(Principal principal);
     UserEntity getEntityByPrincipal(Principal principal);
 
-    AuthenticationDto changeUsername(UserDto user, Principal principal, HttpServletRequest request);
+    AuthenticationDto changeUsername(UserDto userDto, Principal principal, HttpServletRequest request);
 
-    UserDto changePassword(UserDto user, Principal principal);
+    UserDto changePassword(UserDto userDto, Principal principal);
 
-    void delete(UserEntity user);
+    void delete(UserEntity userEntity);
 }

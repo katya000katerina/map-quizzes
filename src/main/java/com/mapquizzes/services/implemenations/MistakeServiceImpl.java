@@ -1,6 +1,5 @@
 package com.mapquizzes.services.implemenations;
 
-import com.mapquizzes.exceptions.custom.internalservererror.NullDtoException;
 import com.mapquizzes.models.dto.MistakeDto;
 import com.mapquizzes.models.dto.PrincipalQuizMistakesDto;
 import com.mapquizzes.models.entities.MistakeEntity;
@@ -29,24 +28,17 @@ public class MistakeServiceImpl implements MistakeService {
 
     @Transactional
     @Override
-    public MistakeDto saveOrUpdate(MistakeDto dto, Principal principal) {
-        if (dto == null) {
-            throw new NullDtoException("MistakeDto is null");
-        }
-        if (principal == null) {
-            throw new IllegalArgumentException("Principal is null");
-        }
-
+    public MistakeDto saveOrUpdate(MistakeDto mistakeDto, Principal principal) {
         UserEntity userEntity = userService.getEntityByPrincipal(principal);
-        QuestionEntity questionEntity = questionService.getEntityById(dto.questionId());
+        QuestionEntity questionEntity = questionService.getEntityById(mistakeDto.questionId());
 
         Optional<MistakeEntity> currMistakeEntityOp = mistakeRepo.findById(new MistakeId(userEntity, questionEntity));
         MistakeEntity mistakeEntity;
         if (currMistakeEntityOp.isPresent()) {
             mistakeEntity = currMistakeEntityOp.get();
-            mistakeEntity.setNumberOfMistakes(mistakeEntity.getNumberOfMistakes() + dto.numberOfMistakes());
+            mistakeEntity.setNumberOfMistakes(mistakeEntity.getNumberOfMistakes() + mistakeDto.numberOfMistakes());
         } else {
-            mistakeEntity = new MistakeEntity(userEntity, questionEntity, dto.numberOfMistakes());
+            mistakeEntity = new MistakeEntity(userEntity, questionEntity, mistakeDto.numberOfMistakes());
         }
         mistakeEntity = mistakeRepo.save(mistakeEntity);
         return new MistakeDto(mistakeEntity.getQuestion().getId(), mistakeEntity.getNumberOfMistakes());
@@ -54,8 +46,8 @@ public class MistakeServiceImpl implements MistakeService {
 
     @Transactional
     @Override
-    public void deleteAllByUser(UserEntity user) {
-        mistakeRepo.deleteAllByUser(user);
+    public void deleteAllByUser(UserEntity userEntity) {
+        mistakeRepo.deleteAllByUser(userEntity);
     }
 
     @Transactional

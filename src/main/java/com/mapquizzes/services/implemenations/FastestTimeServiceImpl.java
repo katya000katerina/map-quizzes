@@ -1,6 +1,5 @@
 package com.mapquizzes.services.implemenations;
 
-import com.mapquizzes.exceptions.custom.internalservererror.NullDtoException;
 import com.mapquizzes.models.dto.TestCompletionTimeDto;
 import com.mapquizzes.models.entities.FastestTimeEntity;
 import com.mapquizzes.models.entities.QuizEntity;
@@ -24,23 +23,16 @@ public class FastestTimeServiceImpl implements FastestTimeService {
     private final FastestTimeRepository fastestTimeRepo;
     private final UserService userService;
     private final QuizService quizService;
-    private final FastestTimeMapper mapper;
+    private final FastestTimeMapper fastestTimeMapper;
 
     @Transactional
     @Override
-    public TestCompletionTimeDto saveOrUpdate(TestCompletionTimeDto dto, Principal principal) {
-        if (dto == null) {
-            throw new NullDtoException("TestCompletionTimeDto is null");
-        }
-        if (principal == null) {
-            throw new IllegalArgumentException("Principal is null");
-        }
-
+    public TestCompletionTimeDto saveOrUpdate(TestCompletionTimeDto complTimeDto, Principal principal) {
         UserEntity userEntity = userService.getEntityByPrincipal(principal);
-        QuizEntity quizEntity = quizService.getEntityById(dto.quizId());
+        QuizEntity quizEntity = quizService.getEntityById(complTimeDto.quizId());
         Optional<FastestTimeEntity> currEntityOp = fastestTimeRepo.findById(new FastestTimeId(userEntity, quizEntity));
 
-        Integer timeInMillis = dto.timeInMillis();
+        Integer timeInMillis = complTimeDto.timeInMillis();
         FastestTimeEntity entity;
         if (currEntityOp.isPresent()) {
             entity = currEntityOp.get();
@@ -52,12 +44,12 @@ public class FastestTimeServiceImpl implements FastestTimeService {
             entity = new FastestTimeEntity(userEntity, quizEntity, timeInMillis);
             entity = fastestTimeRepo.save(entity);
         }
-        return mapper.mapEntityToTestCompletionTimeDto(entity);
+        return fastestTimeMapper.mapEntityToTestCompletionTimeDto(entity);
     }
 
     @Transactional
     @Override
-    public void deleteAllByUser(UserEntity user) {
-        fastestTimeRepo.deleteAllByUser(user);
+    public void deleteAllByUser(UserEntity userEntity) {
+        fastestTimeRepo.deleteAllByUser(userEntity);
     }
 }

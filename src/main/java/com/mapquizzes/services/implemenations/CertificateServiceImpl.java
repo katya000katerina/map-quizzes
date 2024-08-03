@@ -57,9 +57,6 @@ public class CertificateServiceImpl implements CertificateService {
         private PDFont font;
 
         public CertificateBuilder principal(Principal principal) {
-            if (principal == null) {
-                throw new IllegalArgumentException("Principal cannot be null");
-            }
             this.principal = principal;
             return this;
         }

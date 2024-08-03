@@ -30,7 +30,7 @@ import java.time.OffsetDateTime;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private final UserMapper mapper;
+    private final UserMapper userMapper;
     private final UserRepository userRepo;
     private final PasswordEncoder encoder;
     private final JwtService jwtService;
@@ -44,12 +44,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public AuthenticationDto signUp(UserDto userDto) {
-        UserEntity userEntity = mapper.mapDtoToEntity(userDto);
+        UserEntity userEntity = userMapper.mapDtoToEntity(userDto);
         userEntity.setCreatedAt(OffsetDateTime.now());
         setEncodedPassword(userEntity, userEntity.getPassword());
         userRepo.save(userEntity);
 
-        userDto = mapper.mapEntityToDto(userEntity);
+        userDto = userMapper.mapEntityToDto(userEntity);
         AuthenticationDto authDto = getAuthenticationDto(userEntity);
         authDto.setUserDto(userDto);
         return authDto;

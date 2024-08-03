@@ -18,13 +18,13 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
-    private final UserMapper mapper;
+    private final UserMapper userMapper;
 
     private final AuthenticationService authService;
 
     @Override
     public UserDto getDtoByPrincipal(Principal principal) {
-        return mapper.mapEntityToDto(getEntityByPrincipal(principal));
+        return userMapper.mapEntityToDto(getEntityByPrincipal(principal));
     }
 
     @Override
@@ -37,27 +37,27 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public AuthenticationDto changeUsername(UserDto dto, Principal principal, HttpServletRequest request) {
-        UserEntity entity = getEntityByPrincipal(principal);
-        entity.setUsername(dto.username());
-        entity = userRepo.save(entity);
-        AuthenticationDto authDto = authService.getNewTokensForPrincipal(entity, request);
-        authDto.setUserDto(mapper.mapEntityToDto(entity));
+    public AuthenticationDto changeUsername(UserDto userDto, Principal principal, HttpServletRequest request) {
+        UserEntity userEntity = getEntityByPrincipal(principal);
+        userEntity.setUsername(userDto.username());
+        userEntity = userRepo.save(userEntity);
+        AuthenticationDto authDto = authService.getNewTokensForPrincipal(userEntity, request);
+        authDto.setUserDto(userMapper.mapEntityToDto(userEntity));
         return authDto;
     }
 
     @Transactional
     @Override
-    public UserDto changePassword(UserDto dto, Principal principal) {
-        UserEntity entity = getEntityByPrincipal(principal);
-        authService.setEncodedPassword(entity, dto.password());
-        entity = userRepo.save(entity);
-        return mapper.mapEntityToDto(entity);
+    public UserDto changePassword(UserDto userDto, Principal principal) {
+        UserEntity userEntity = getEntityByPrincipal(principal);
+        authService.setEncodedPassword(userEntity, userDto.password());
+        userEntity = userRepo.save(userEntity);
+        return userMapper.mapEntityToDto(userEntity);
     }
 
     @Transactional
     @Override
-    public void delete(UserEntity user) {
-        userRepo.delete(user);
+    public void delete(UserEntity userEntity) {
+        userRepo.delete(userEntity);
     }
 }

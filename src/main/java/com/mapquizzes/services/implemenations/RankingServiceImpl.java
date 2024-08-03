@@ -1,12 +1,9 @@
 package com.mapquizzes.services.implemenations;
 
-import com.mapquizzes.exceptions.custom.badrequest.InvalidIdException;
-import com.mapquizzes.exceptions.custom.internalservererror.NullIdException;
 import com.mapquizzes.models.dto.GlobalRankingDto;
 import com.mapquizzes.models.dto.PrincipalRankingDto;
 import com.mapquizzes.models.mapping.mappers.FastestTimeMapper;
 import com.mapquizzes.repositories.FastestTimeRepository;
-import com.mapquizzes.repositories.QuizRepository;
 import com.mapquizzes.services.interfaces.RankingService;
 import com.mapquizzes.services.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,21 +19,11 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class RankingServiceImpl implements RankingService {
     private final FastestTimeRepository fastestTimeRepo;
-    private final QuizRepository quizRepo;
     private final UserService userService;
     private final FastestTimeMapper mapper;
 
     @Override
     public Page<GlobalRankingDto> getRankingByQuizId(Integer quizId, Pageable pageable) {
-        if (quizId == null) {
-            throw new NullIdException("Quiz id is null");
-        }
-        if (!quizRepo.existsById(quizId)) {
-            throw new InvalidIdException(String.format("Quiz with id=%d doesn't exist", quizId));
-        }
-        if (pageable == null) {
-            throw new IllegalArgumentException("Pageable is null");
-        }
         return fastestTimeRepo
                 .findAllByQuizId(quizId, pageable)
                 .map(mapper::mapEntityToGlobalRankingDto);

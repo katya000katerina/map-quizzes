@@ -3,5 +3,5 @@ package com.mapquizzes.services.interfaces;
 import com.mapquizzes.models.entities.QuestionEntity;
 
 public interface QuestionService {
-    QuestionEntity getEntityById(Integer id);
+    QuestionEntity getEntityById(Integer questionId);
 }

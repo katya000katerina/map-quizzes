@@ -1,8 +1,6 @@
 package com.mapquizzes.services.implemenations;
 
-import com.mapquizzes.exceptions.custom.badrequest.InvalidIdException;
 import com.mapquizzes.exceptions.custom.internalservererror.EntityNotFoundException;
-import com.mapquizzes.exceptions.custom.internalservererror.NullIdException;
 import com.mapquizzes.models.dto.QuizDto;
 import com.mapquizzes.models.entities.QuizEntity;
 import com.mapquizzes.models.mapping.mappers.QuizMapper;
@@ -18,33 +16,22 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
     private final QuizRepository quizRepo;
-    private final QuizMapper mapper;
+    private final QuizMapper quizMapper;
 
     @Override
-    public QuizEntity getEntityById(Integer id) {
-        checkQuizId(id);
-
-        return quizRepo.findById(id).orElseThrow(() -> {
-            throw new EntityNotFoundException(String.format("Quiz with id=%d was not found", id));
+    public QuizEntity getEntityById(Integer quizId) {
+        return quizRepo.findById(quizId).orElseThrow(() -> {
+            throw new EntityNotFoundException(String.format("Quiz with id=%d was not found", quizId));
         });
     }
 
     @Override
-    public QuizDto getDtoById(Integer id) {
-        return mapper.mapEntityToDtoWithoutQuestions(getEntityById(id));
+    public QuizDto getDtoById(Integer quizId) {
+        return quizMapper.mapEntityToDtoWithoutQuestions(getEntityById(quizId));
     }
 
     @Override
     public Stream<QuizDto> getAllDto() {
-        return quizRepo.findAll().stream().map(mapper::mapEntityToDto).sorted(Comparator.comparing(QuizDto::id));
-    }
-
-    private void checkQuizId(Integer quizId) {
-        if (quizId == null) {
-            throw new NullIdException("Quiz id is null");
-        }
-        if (!quizRepo.existsById(quizId)) {
-            throw new InvalidIdException(String.format("Quiz with id=%d doesn't exist", quizId));
-        }
+        return quizRepo.findAll().stream().map(quizMapper::mapEntityToDto).sorted(Comparator.comparing(QuizDto::id));
     }
 }

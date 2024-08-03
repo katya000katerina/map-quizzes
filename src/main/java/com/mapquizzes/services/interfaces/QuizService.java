@@ -9,7 +9,7 @@ public interface QuizService {
 
     Stream<QuizDto> getAllDto();
 
-    QuizEntity getEntityById(Integer id);
+    QuizEntity getEntityById(Integer quizId);
 
-    QuizDto getDtoById(Integer id);
+    QuizDto getDtoById(Integer quizId);
 }
