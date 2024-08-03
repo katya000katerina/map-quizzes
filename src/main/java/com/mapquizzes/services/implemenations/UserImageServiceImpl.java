@@ -38,22 +38,22 @@ public class UserImageServiceImpl implements UserImageService {
             throw new EmptyFileException("Uploaded image is empty");
         }
 
-        UserImageEntity image = new UserImageEntity();
+        UserImageEntity imageEntity = new UserImageEntity();
 
         UserEntity userEntity = userService.getEntityByPrincipal(principal);
-        image.setUser(userEntity);
+        imageEntity.setUser(userEntity);
 
         try {
-            image.setBytes(file.getBytes());
+            imageEntity.setBytes(file.getBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         String fileName = file.getOriginalFilename();
-        image.setFileName(fileName);
-        imageRepo.getIdByUser(userEntity).ifPresent(image::setId);
+        imageEntity.setFileName(fileName);
+        imageRepo.getIdByUser(userEntity).ifPresent(imageEntity::setId);
 
-        byte[] bytes = imageRepo.save(image).getBytes();
+        byte[] bytes = imageRepo.save(imageEntity).getBytes();
 
         return getPrincipalProfileImageDto(fileName, bytes);
     }
@@ -87,13 +87,13 @@ public class UserImageServiceImpl implements UserImageService {
         Optional<UserImageEntity> imageOptional = imageRepo.findByUser(userEntity);
 
         if (imageOptional.isPresent()) {
-            UserImageEntity image = imageOptional.get();
-            return func.apply(image.getFileName(), image.getBytes());
+            UserImageEntity imageEntity = imageOptional.get();
+            return func.apply(imageEntity.getFileName(), imageEntity.getBytes());
         } else {
             try {
-                File image = ResourceUtils.getFile(noImagePath);
-                byte[] bytes = Files.readAllBytes(image.toPath());
-                return func.apply(image.getName(), bytes);
+                File imageFile = ResourceUtils.getFile(noImagePath);
+                byte[] bytes = Files.readAllBytes(imageFile.toPath());
+                return func.apply(imageFile.getName(), bytes);
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
