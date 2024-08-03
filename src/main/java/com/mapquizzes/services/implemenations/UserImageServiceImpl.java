@@ -1,5 +1,6 @@
 package com.mapquizzes.services.implemenations;
 
+import com.mapquizzes.exceptions.custom.badrequest.EmptyFileException;
 import com.mapquizzes.models.dto.PrincipalCertificateImageDto;
 import com.mapquizzes.models.dto.PrincipalProfileImageDto;
 import com.mapquizzes.models.entities.UserEntity;
@@ -33,6 +34,10 @@ public class UserImageServiceImpl implements UserImageService {
 
     @Override
     public PrincipalProfileImageDto saveOrUpdate(MultipartFile file, Principal principal) {
+        if (file.isEmpty()) {
+            throw new EmptyFileException("Uploaded image is empty");
+        }
+
         UserImageEntity image = new UserImageEntity();
 
         UserEntity userEntity = userService.getEntityByPrincipal(principal);
