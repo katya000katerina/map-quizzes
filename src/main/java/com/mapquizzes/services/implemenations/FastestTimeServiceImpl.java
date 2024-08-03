@@ -33,18 +33,18 @@ public class FastestTimeServiceImpl implements FastestTimeService {
         Optional<FastestTimeEntity> currEntityOp = fastestTimeRepo.findById(new FastestTimeId(userEntity, quizEntity));
 
         Integer timeInMillis = complTimeDto.timeInMillis();
-        FastestTimeEntity entity;
+        FastestTimeEntity fstTimeEntity;
         if (currEntityOp.isPresent()) {
-            entity = currEntityOp.get();
-            if (entity.getTimeInMillis() > timeInMillis) {
-                entity.setTimeInMillis(timeInMillis);
-                entity = fastestTimeRepo.save(entity);
+            fstTimeEntity = currEntityOp.get();
+            if (fstTimeEntity.getTimeInMillis() > timeInMillis) {
+                fstTimeEntity.setTimeInMillis(timeInMillis);
+                fstTimeEntity = fastestTimeRepo.save(fstTimeEntity);
             }
         } else {
-            entity = new FastestTimeEntity(userEntity, quizEntity, timeInMillis);
-            entity = fastestTimeRepo.save(entity);
+            fstTimeEntity = new FastestTimeEntity(userEntity, quizEntity, timeInMillis);
+            fstTimeEntity = fastestTimeRepo.save(fstTimeEntity);
         }
-        return fastestTimeMapper.mapEntityToTestCompletionTimeDto(entity);
+        return fastestTimeMapper.mapEntityToTestCompletionTimeDto(fstTimeEntity);
     }
 
     @Transactional

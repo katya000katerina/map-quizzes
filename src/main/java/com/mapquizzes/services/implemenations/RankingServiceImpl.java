@@ -20,13 +20,13 @@ import java.util.stream.Stream;
 public class RankingServiceImpl implements RankingService {
     private final FastestTimeRepository fastestTimeRepo;
     private final UserService userService;
-    private final FastestTimeMapper mapper;
+    private final FastestTimeMapper fastestTimeMapper;
 
     @Override
     public Page<GlobalRankingDto> getRankingByQuizId(Integer quizId, Pageable pageable) {
         return fastestTimeRepo
                 .findAllByQuizId(quizId, pageable)
-                .map(mapper::mapEntityToGlobalRankingDto);
+                .map(fastestTimeMapper::mapEntityToGlobalRankingDto);
     }
 
     @Override

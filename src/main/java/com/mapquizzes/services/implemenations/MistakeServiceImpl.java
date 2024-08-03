@@ -53,22 +53,22 @@ public class MistakeServiceImpl implements MistakeService {
     @Transactional
     @Override
     public void deleteByQuestionIdAndPrincipal(Integer questionId, Principal principal) {
-        UserEntity user = userService.getEntityByPrincipal(principal);
-        mistakeRepo.deleteByQuestionIdAndUser(questionId, user);
+        UserEntity userEntity = userService.getEntityByPrincipal(principal);
+        mistakeRepo.deleteByQuestionIdAndUser(questionId, userEntity);
     }
 
     public Stream<PrincipalQuizMistakesDto> getMistakesForPrincipal(Principal principal) {
-        UserEntity user = userService.getEntityByPrincipal(principal);
+        UserEntity userEntity = userService.getEntityByPrincipal(principal);
 
-        List<MistakeEntity> mistakes = mistakeRepo.getAllByUser(user);
+        List<MistakeEntity> mistakes = mistakeRepo.getAllByUser(userEntity);
 
         Map<Integer, PrincipalQuizMistakesDto> quizMistakesMap = new HashMap<>();
 
         for (MistakeEntity mistake : mistakes) {
-            QuizEntity quiz = mistake.getQuestion().getQuiz();
+            QuizEntity quizEntity = mistake.getQuestion().getQuiz();
             PrincipalQuizMistakesDto quizMistakes = quizMistakesMap.computeIfAbsent(
-                    quiz.getId(),
-                    id -> new PrincipalQuizMistakesDto(id, quiz.getName(), new ArrayList<>())
+                    quizEntity.getId(),
+                    id -> new PrincipalQuizMistakesDto(id, quizEntity.getName(), new ArrayList<>())
             );
 
             PrincipalQuizMistakesDto.PrincipalMistakeDto principalMistakeDto = new PrincipalQuizMistakesDto.PrincipalMistakeDto(

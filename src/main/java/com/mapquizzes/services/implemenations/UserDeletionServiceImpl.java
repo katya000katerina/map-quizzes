@@ -21,12 +21,12 @@ public class UserDeletionServiceImpl implements UserDeletionService {
     @Transactional
     @Override
     public void deletePrincipal(Principal principal, HttpServletRequest request) {
-        UserEntity entity = userService.getEntityByPrincipal(principal);
+        UserEntity userEntity = userService.getEntityByPrincipal(principal);
         blacklistService.blacklistAccessAndRefreshTokens(request);
 
-        fastestTimeService.deleteAllByUser(entity);
-        mistakeService.deleteAllByUser(entity);
-        imageService.deleteByUser(entity);
-        userService.delete(entity);
+        fastestTimeService.deleteAllByUser(userEntity);
+        mistakeService.deleteAllByUser(userEntity);
+        imageService.deleteByUser(userEntity);
+        userService.delete(userEntity);
     }
 }

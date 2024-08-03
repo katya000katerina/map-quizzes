@@ -26,23 +26,23 @@ public class QuizQuestionServiceImpl implements QuizQuestionService {
     @Override
     @Cacheable(value = CacheConfig.QUIZ_QUESTION_CACHE_NAME, unless = "#result == null")
     public QuizDto getQuizByIdWithQuestions(Integer quizId) {
-        QuizEntity entity = quizRepo.findById(quizId)
+        QuizEntity quizEntity = quizRepo.findById(quizId)
                 .orElseThrow(() -> {
                     throw new EntityNotFoundException(String.format("Quiz with id=%d was not found", quizId));
                 });
-        Hibernate.initialize(entity.getQuestions());
-        return quizMapper.mapEntityToDto(entity);
+        Hibernate.initialize(quizEntity.getQuestions());
+        return quizMapper.mapEntityToDto(quizEntity);
     }
 
     @Override
     public QuizDto getMistakesQuizByIdWithQuestions(Integer quizId, Principal principal) {
-        UserEntity user = userService.getEntityByPrincipal(principal);
+        UserEntity userEntity = userService.getEntityByPrincipal(principal);
 
-        QuizEntity entity = quizRepo.findMistakesQuizByIdAndUser(quizId, user)
+        QuizEntity quizEntity = quizRepo.findMistakesQuizByIdAndUser(quizId, userEntity)
                 .orElseThrow(() -> {
                     throw new EntityNotFoundException(String.format("Quiz with id=%d was not found", quizId));
                 });
 
-        return quizMapper.mapEntityToDto(entity);
+        return quizMapper.mapEntityToDto(quizEntity);
     }
 }
