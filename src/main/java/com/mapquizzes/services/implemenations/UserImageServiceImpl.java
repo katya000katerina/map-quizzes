@@ -103,19 +103,19 @@ public class UserImageServiceImpl implements UserImageService {
 
     private PrincipalProfileImageDto getPrincipalProfileImageDto(String fileName, byte[] bytes) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(getContentType(fileName)));
+        headers.setContentType((getContentType(fileName)));
         headers.setContentLength(bytes.length);
         return new PrincipalProfileImageDto(bytes, headers);
     }
 
-    private String getContentType(String fileName) {
+    private MediaType getContentType(String fileName) {
         if (fileName.endsWith(".png")) {
-            return "image/png";
+            return MediaType.IMAGE_PNG;
         } else if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
-            return "image/jpeg";
+            return MediaType.IMAGE_JPEG;
         } else if (fileName.endsWith(".gif")) {
-            return "image/gif";
+            return MediaType.IMAGE_GIF;
         }
-        return "application/octet-stream";
+        return MediaType.APPLICATION_OCTET_STREAM;
     }
 }
