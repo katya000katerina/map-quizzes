@@ -5,6 +5,7 @@ import com.mapquizzes.models.dto.PrincipalQuizMistakesDto;
 import com.mapquizzes.services.interfaces.MistakeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,14 +19,14 @@ import java.util.stream.Collectors;
 public class MistakesRestController {
     private final MistakeService mistakeService;
 
-    @PatchMapping
+    @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MistakeDto> saveOrUpdate(@Valid @RequestBody MistakeDto mistakeDto,
                                                    Principal principal) {
         return ResponseEntity.accepted()
                 .body(mistakeService.saveOrUpdate(mistakeDto, principal));
     }
 
-    @GetMapping("/current")
+    @GetMapping(value = "/current", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PrincipalQuizMistakesDto>> getMistakesForPrincipal(Principal principal) {
         List<PrincipalQuizMistakesDto> mistakes = mistakeService.getMistakesForPrincipal(principal).collect(Collectors.toList());
         return ResponseEntity.ok(mistakes);

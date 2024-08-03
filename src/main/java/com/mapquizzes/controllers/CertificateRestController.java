@@ -6,6 +6,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ import java.security.Principal;
 public class CertificateRestController {
     private final CertificateService certificateService;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<Resource> downloadCertificate(Principal principal) throws IOException {
         ByteArrayResource resource = new ByteArrayResource(certificateService.getCertificate(principal));
         HttpHeaders header = new HttpHeaders();

@@ -4,6 +4,7 @@ import com.mapquizzes.models.dto.TestCompletionTimeDto;
 import com.mapquizzes.services.interfaces.FastestTimeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +19,7 @@ import java.security.Principal;
 public class FastestTimeRestController {
     private final FastestTimeService fastestTimeService;
 
-    @PatchMapping
+    @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TestCompletionTimeDto> saveOrUpdate(@Valid @RequestBody TestCompletionTimeDto complTimeDto,
                                                               Principal principal) {
         return ResponseEntity

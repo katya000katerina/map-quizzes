@@ -6,6 +6,7 @@ import com.mapquizzes.services.interfaces.RankingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,14 +23,14 @@ import java.util.stream.Collectors;
 public class RankingRestController {
     private final RankingService rankingService;
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<GlobalRankingDto>> getByQuizIdWithUsers(@RequestParam("quiz-id") Integer quizId,
                                                                                      Pageable pageable) {
         Page<GlobalRankingDto> globalRankingPage = rankingService.getRankingByQuizId(quizId, pageable);
         return ResponseEntity.ok(globalRankingPage);
     }
 
-    @GetMapping("/current")
+    @GetMapping(value = "/current", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<PrincipalRankingDto>> getByPrincipal(Principal principal) {
         List<PrincipalRankingDto> principalRanking = rankingService.getRankingByPrincipal(principal).collect(Collectors.toList());
         return ResponseEntity.ok(principalRanking);
