@@ -40,7 +40,7 @@ function nextPage() {
 }
 
 function makeTable(json) {
-    lastPage = json.page.totalPages - 1;
+    lastPage = json.totalPages - 1;
 
     if (curPage === 0) {
         prevButton.style.visibility = "hidden";
@@ -56,7 +56,7 @@ function makeTable(json) {
 
     let table = document.getElementById('data');
     let content = json.content;
-    let offset = json.page.size * json.page.number;
+    let offset = json.pageable.offset;
     let data = '';
 
     for (let i = 0; i < content.length; i++) {
