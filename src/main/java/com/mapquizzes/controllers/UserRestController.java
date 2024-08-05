@@ -6,7 +6,6 @@ import com.mapquizzes.services.interfaces.UserDeletionService;
 import com.mapquizzes.services.interfaces.UserService;
 import com.mapquizzes.validation.groups.user.ChangePassword;
 import com.mapquizzes.validation.groups.user.ChangeUsername;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,8 +31,9 @@ public class UserRestController {
     @PatchMapping(value = "/username", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> changeUsername(@Validated(ChangeUsername.class) @RequestBody UserDto userDto,
                                                   Principal principal,
-                                                  HttpServletRequest request) {
-        AuthenticationDto authDto = userService.changeUsername(userDto, principal, request);
+                                                  @CookieValue("accessToken") String accessToken,
+                                                  @CookieValue("refreshToken") String refreshToken) {
+        AuthenticationDto authDto = userService.changeUsername(userDto, principal, accessToken, refreshToken);
         return ResponseEntity
                 .status(HttpStatus.ACCEPTED)
                 .headers(authDto.getTokenCookiesHeaders())
@@ -50,8 +50,10 @@ public class UserRestController {
     }
 
     @DeleteMapping("/current")
-    public ResponseEntity<Void> deleteSignedInUser(Principal principal, HttpServletRequest request) {
-        userDeletionService.deletePrincipal(principal, request);
+    public ResponseEntity<Void> deleteSignedInUser(Principal principal,
+                                                   @CookieValue("accessToken") String accessToken,
+                                                   @CookieValue("refreshToken") String refreshToken) {
+        userDeletionService.deletePrincipal(principal, accessToken, refreshToken);
         return ResponseEntity.noContent().build();
     }
 }

@@ -9,14 +9,9 @@ import com.mapquizzes.models.mapping.mappers.UserMapper;
 import com.mapquizzes.repositories.UserRepository;
 import com.mapquizzes.services.interfaces.AuthenticationService;
 import com.mapquizzes.services.interfaces.JwtService;
-import com.mapquizzes.services.interfaces.TokenBlacklistService;
 import com.mapquizzes.utils.CookieTokenUtils;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.server.Cookie;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;
@@ -34,7 +29,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepo;
     private final PasswordEncoder encoder;
     private final JwtService jwtService;
-    private final TokenBlacklistService blacklistService;
     private final AuthenticationManager authManager;
     @Value("${map-quizzes.security.jwt.access-token.expiration-time}")
     private long accessTokenExpTime;
@@ -72,10 +66,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationDto refreshToken(HttpServletRequest request) {
-        String refreshToken = CookieTokenUtils.extractRefreshToken(request);
-
-        if (refreshToken == null || jwtService.isRefreshTokenBlacklisted(refreshToken)) {
+    public AuthenticationDto refreshToken(String refreshToken) {
+        if (jwtService.isRefreshTokenBlacklisted(refreshToken)) {
             throw new RefreshTokenException();
         }
 
@@ -89,39 +81,34 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationDto getNewTokensForPrincipal(UserEntity userEntity, HttpServletRequest request) {
-        blacklistService.blacklistAccessAndRefreshTokens(request);
-        return getAuthenticationDto(userEntity);
-    }
-
-    private AuthenticationDto getAuthenticationDto(UserEntity userEntity) {
+    public AuthenticationDto getAuthenticationDto(UserEntity userEntity) {
         String accessToken = jwtService.generateAccessToken(userEntity);
         String refreshToken = jwtService.generateRefreshToken(userEntity);
         return new AuthenticationDto(
-                makeTokenCookiesHeaders(
+                CookieTokenUtils.makeTokenCookiesHeaders(
                         accessToken, accessTokenExpTime,
                         refreshToken, refreshTokenExpTime
                 )
         );
     }
 
-    private HttpHeaders makeTokenCookiesHeaders(String accessToken, long accessTokenExpTime,
-                                                String refreshToken, long refreshTokenExpTime) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.SET_COOKIE, makeCookie("accessToken", accessToken, accessTokenExpTime));
-        headers.add(HttpHeaders.SET_COOKIE, makeCookie("refreshToken", refreshToken, refreshTokenExpTime));
-        return headers;
-    }
-
-    private String makeCookie(String name, String token, long expTime) {
-        return ResponseCookie.from(name)
-                .value(token)
-                .maxAge(expTime / 1000)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .sameSite(Cookie.SameSite.STRICT.toString())
-                .build()
-                .toString();
-    }
+//    private HttpHeaders makeTokenCookiesHeaders(String accessToken, long accessTokenExpTime,
+//                                                String refreshToken, long refreshTokenExpTime) {
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add(HttpHeaders.SET_COOKIE, makeCookie("accessToken", accessToken, accessTokenExpTime));
+//        headers.add(HttpHeaders.SET_COOKIE, makeCookie("refreshToken", refreshToken, refreshTokenExpTime));
+//        return headers;
+//    }
+//
+//    private String makeCookie(String name, String token, long expTime) {
+//        return ResponseCookie.from(name)
+//                .value(token)
+//                .maxAge(expTime / 1000)
+//                .httpOnly(true)
+//                .secure(true)
+//                .path("/")
+//                .sameSite(Cookie.SameSite.STRICT.toString())
+//                .build()
+//                .toString();
+//    }
 }

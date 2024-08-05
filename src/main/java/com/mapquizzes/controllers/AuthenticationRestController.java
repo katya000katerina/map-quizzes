@@ -5,16 +5,12 @@ import com.mapquizzes.models.dto.UserDto;
 import com.mapquizzes.services.interfaces.AuthenticationService;
 import com.mapquizzes.validation.groups.user.SignIn;
 import com.mapquizzes.validation.groups.user.SignUp;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -41,8 +37,8 @@ public class AuthenticationRestController {
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<Void> refreshToken(HttpServletRequest request) {
-        AuthenticationDto authDto = authService.refreshToken(request);
+    public ResponseEntity<Void> refreshToken(@CookieValue("refreshToken") String refreshToken) {
+        AuthenticationDto authDto = authService.refreshToken(refreshToken);
         return ResponseEntity
                 .ok()
                 .headers(authDto.getTokenCookiesHeaders())

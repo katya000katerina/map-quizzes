@@ -6,16 +6,14 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mapquizzes.models.dto.AuthenticationDto;
 import com.mapquizzes.models.dto.UserDto;
 import com.mapquizzes.services.interfaces.AuthenticationService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.OffsetDateTime;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import static com.mapquizzes.testutils.CookieTestDataFactoryAndUtils.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,15 +24,12 @@ class AuthenticationRestControllerTest extends BaseControllerTest {
     private AuthenticationService authService;
     private final static String MOCK_USERNAME = "Charmaine Chelsey";
     private final static String MOCK_PASSWORD = "qwerty";
-    private final static String ACCESS_TOKEN = "accessToken=mockAccessToken";
-    private final static String REFRESH_TOKEN = "accessToken=mockAccessToken";
-    private final static String HEADER_NAME = "Set-Cookie";
-    private final static String CONTENT_TYPE = "application/json";
+    private final static String CONTENT_TYPE = MediaType.APPLICATION_JSON_VALUE;
 
     @Test
     void testSignUp_ReturnsCreatedAndExpectedJsonAndCookies() throws Exception {
         UserDto user = new UserDto(null, MOCK_USERNAME, MOCK_PASSWORD, null);
-        AuthenticationDto authDto = TestDataFactory.createAuthDtoWithUser();
+        AuthenticationDto authDto = createAuthDtoWithUser(new UserDto(1, MOCK_USERNAME, MOCK_PASSWORD, OffsetDateTime.now()));
         when(authService.signUp(user)).thenReturn(authDto);
 
         String json = TestDataFactory.createJsonWithCredentials();
@@ -43,10 +38,8 @@ class AuthenticationRestControllerTest extends BaseControllerTest {
                         .content(json)
                         .contentType(CONTENT_TYPE))
                 .andExpect(status().isCreated())
-                .andExpect(header().stringValues(HEADER_NAME, containsInAnyOrder(
-                        ACCESS_TOKEN,
-                        REFRESH_TOKEN
-                )))
+                .andExpect(header().stringValues(SET_COOKIE_HEADER_NAME, getContainsCookiesInAnyOrder()
+                ))
                 .andExpect(content().json(expectedJson));
 
     }
@@ -64,7 +57,7 @@ class AuthenticationRestControllerTest extends BaseControllerTest {
     @Test
     void testSignIn_ReturnsOkAndCookies() throws Exception {
         UserDto mockUser = new UserDto(null, MOCK_USERNAME, MOCK_PASSWORD, null);
-        AuthenticationDto authDto = TestDataFactory.createAuthDtoWithoutUser();
+        AuthenticationDto authDto = createAuthDtoWithoutUser();
         when(authService.signIn(mockUser)).thenReturn(authDto);
 
         String json = TestDataFactory.createJsonWithCredentials();
@@ -72,10 +65,7 @@ class AuthenticationRestControllerTest extends BaseControllerTest {
                         .content(json)
                         .contentType(CONTENT_TYPE))
                 .andExpect(status().isOk())
-                .andExpect(header().stringValues(HEADER_NAME, containsInAnyOrder(
-                        ACCESS_TOKEN,
-                        REFRESH_TOKEN
-                )));
+                .andExpect(header().stringValues(SET_COOKIE_HEADER_NAME, getContainsCookiesInAnyOrder()));
 
     }
 
@@ -91,22 +81,21 @@ class AuthenticationRestControllerTest extends BaseControllerTest {
 
     @Test
     void testRefreshToken_ReturnsOkAndCookies() throws Exception {
-        AuthenticationDto authDto = TestDataFactory.createAuthDtoWithoutUser();
-        when(authService.refreshToken(any(HttpServletRequest.class)))
+        AuthenticationDto authDto = createAuthDtoWithoutUser();
+        when(authService.refreshToken(any(String.class)))
                 .thenReturn(authDto);
 
-        mockMvc.perform(post("/api/v1/auth/refresh-token"))
+        mockMvc.perform(post("/api/v1/auth/refresh-token")
+                        .cookie(createRefreshTokenCookie()))
                 .andExpect(status().isOk())
-                .andExpect(header().stringValues(HEADER_NAME, containsInAnyOrder(
-                        ACCESS_TOKEN,
-                        REFRESH_TOKEN
-                )));
+                .andExpect(header().stringValues(SET_COOKIE_HEADER_NAME, getContainsCookiesInAnyOrder()));
     }
 
     @Test
     @WithMockUser
     void testRefreshToken_ReturnsForbidden() throws Exception {
-        mockMvc.perform(post("/api/v1/auth/refresh-token"))
+        mockMvc.perform(post("/api/v1/auth/refresh-token")
+                        .cookie(createRefreshTokenCookie()))
                 .andExpect(status().isForbidden());
     }
 
@@ -117,32 +106,6 @@ class AuthenticationRestControllerTest extends BaseControllerTest {
             jsonNode.put("username", MOCK_USERNAME);
             jsonNode.put("password", MOCK_PASSWORD);
             return innerObjectMapper.writeValueAsString(jsonNode);
-        }
-
-        static AuthenticationDto createAuthDtoWithoutUser() {
-            String[] access = ACCESS_TOKEN.split("=");
-            String[] refresh = REFRESH_TOKEN.split("=");
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.SET_COOKIE,
-                    ResponseCookie
-                            .from(access[0])
-                            .value(access[1])
-                            .build()
-                            .toString());
-            headers.add(HttpHeaders.SET_COOKIE,
-                    ResponseCookie
-                            .from(refresh[0])
-                            .value(refresh[1])
-                            .build()
-                            .toString());
-            return new AuthenticationDto(headers);
-        }
-
-        static AuthenticationDto createAuthDtoWithUser() {
-            AuthenticationDto authDto = createAuthDtoWithoutUser();
-            authDto.setUserDto(new UserDto(1, MOCK_USERNAME, MOCK_PASSWORD, OffsetDateTime.now()));
-            return authDto;
         }
     }
 

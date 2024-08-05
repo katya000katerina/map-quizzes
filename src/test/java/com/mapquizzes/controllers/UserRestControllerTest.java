@@ -4,17 +4,16 @@ import com.mapquizzes.models.dto.AuthenticationDto;
 import com.mapquizzes.models.dto.UserDto;
 import com.mapquizzes.services.interfaces.UserDeletionService;
 import com.mapquizzes.services.interfaces.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.security.Principal;
 import java.time.OffsetDateTime;
 
+import static com.mapquizzes.testutils.CookieTestDataFactoryAndUtils.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -59,11 +58,21 @@ class UserRestControllerTest extends BaseControllerTest {
     void testChangeUsername_ReturnsAcceptedAndExpectedJson() throws Exception {
         setupUser();
         UserDto changeUsernameUser = new UserDto(null, username, null, null);
-        AuthenticationDto authDto = new AuthenticationDto(user, new HttpHeaders());
-        when(userService.changeUsername(eq(changeUsernameUser), any(Principal.class), any(HttpServletRequest.class)))
+        AuthenticationDto authDto = createAuthDtoWithUser(user);
+        when(userService.changeUsername(eq(changeUsernameUser), any(Principal.class),
+                any(String.class), any(String.class)))
                 .thenReturn(authDto);
-        performPatch_ReturnsAcceptedAndExpectedJson("/api/v1/users/username",
-                "{\"username\": \"" + username + "\"}");
+
+        String expectedJson = objectMapper.writeValueAsString(user);
+        mockMvc.perform(patch("/api/v1/users/username")
+                        .cookie(createAccessTokenCookie())
+                        .cookie(createRefreshTokenCookie())
+                        .content("{\"username\": \"" + username + "\"}")
+                        .contentType("application/json")
+                )
+                .andExpect(status().isAccepted())
+                .andExpect(header().stringValues(SET_COOKIE_HEADER_NAME, getContainsCookiesInAnyOrder()))
+                .andExpect(content().json(expectedJson));
     }
 
     @ParameterizedTest
@@ -89,8 +98,12 @@ class UserRestControllerTest extends BaseControllerTest {
         when(userService.changePassword(eq(changePasswordUser), any(Principal.class)))
                 .thenReturn(user);
 
-        performPatch_ReturnsAcceptedAndExpectedJson("/api/v1/users/password",
-                "{\"password\": \"" + password + "\"}");
+        String expectedJson = objectMapper.writeValueAsString(user);
+        mockMvc.perform(patch("/api/v1/users/password")
+                        .content("{\"password\": \"" + password + "\"}")
+                        .contentType("application/json"))
+                .andExpect(status().isAccepted())
+                .andExpect(content().json(expectedJson));
 
     }
 
@@ -111,14 +124,16 @@ class UserRestControllerTest extends BaseControllerTest {
     @WithMockUser
     void testDeleteSignedInUser_ReturnsNoContent() throws Exception {
         doNothing().when(userDeletionService)
-                .deletePrincipal(any(Principal.class), any(HttpServletRequest.class));
+                .deletePrincipal(any(Principal.class), any(String.class), any(String.class));
 
-        mockMvc.perform(delete("/api/v1/users/current"))
+        mockMvc.perform(delete("/api/v1/users/current")
+                        .cookie(createAccessTokenCookie())
+                        .cookie(createRefreshTokenCookie()))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-       void testDeleteSignedInUser_ReturnsUnauthorized() throws Exception {
+    void testDeleteSignedInUser_ReturnsUnauthorized() throws Exception {
         mockMvc.perform(delete("/api/v1/users/current"))
                 .andExpect(status().isUnauthorized());
     }
@@ -143,14 +158,5 @@ class UserRestControllerTest extends BaseControllerTest {
                         .value("Validation error"))
                 .andExpect(jsonPath("$.errors[0]")
                         .value(errorMessage));
-    }
-
-    private void performPatch_ReturnsAcceptedAndExpectedJson(String path, String json) throws Exception {
-        String expectedJson = objectMapper.writeValueAsString(user);
-        mockMvc.perform(patch(path)
-                        .content(json)
-                        .contentType("application/json"))
-                .andExpect(status().isAccepted())
-                .andExpect(content().json(expectedJson));
     }
 }

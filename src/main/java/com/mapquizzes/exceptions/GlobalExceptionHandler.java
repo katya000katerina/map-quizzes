@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -36,6 +37,15 @@ public class GlobalExceptionHandler {
                 .toList();
         ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Validation error", errors);
         return ResponseEntity.badRequest().body(apiError);
+    }
+
+    @ExceptionHandler(MissingRequestCookieException.class)
+    public ResponseEntity<ApiError> handleMissingCookie(MissingRequestCookieException ex) {
+        logger.error(ex);
+        String cookieName = ex.getCookieName();
+        String errorMessage = String.format("Required cookie \"%s\" is missing", cookieName);
+        HttpStatus httpStatus = cookieName.endsWith("Token") ? HttpStatus.UNAUTHORIZED : HttpStatus.BAD_REQUEST;
+        return buildResponseEntity(new ApiError(httpStatus, errorMessage));
     }
 
     @ExceptionHandler(SimpleCustomUnauthorizedException.class)

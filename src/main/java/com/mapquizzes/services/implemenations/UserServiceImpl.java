@@ -6,8 +6,9 @@ import com.mapquizzes.models.dto.UserDto;
 import com.mapquizzes.models.entities.UserEntity;
 import com.mapquizzes.models.mapping.mappers.UserMapper;
 import com.mapquizzes.repositories.UserRepository;
-import com.mapquizzes.services.interfaces.*;
-import jakarta.servlet.http.HttpServletRequest;
+import com.mapquizzes.services.interfaces.AuthenticationService;
+import com.mapquizzes.services.interfaces.TokenBlacklistService;
+import com.mapquizzes.services.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     private final AuthenticationService authService;
+    private final TokenBlacklistService blacklistService;
 
     @Override
     public UserDto getDtoByPrincipal(Principal principal) {
@@ -37,11 +39,13 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public AuthenticationDto changeUsername(UserDto userDto, Principal principal, HttpServletRequest request) {
+    public AuthenticationDto changeUsername(UserDto userDto, Principal principal, String accessToken, String refreshToken) {
         UserEntity userEntity = getEntityByPrincipal(principal);
         userEntity.setUsername(userDto.username());
         userEntity = userRepo.save(userEntity);
-        AuthenticationDto authDto = authService.getNewTokensForPrincipal(userEntity, request);
+
+        blacklistService.blacklistAccessAndRefreshTokens(accessToken, refreshToken);
+        AuthenticationDto authDto = authService.getAuthenticationDto(userEntity);
         authDto.setUserDto(userMapper.mapEntityToDto(userEntity));
         return authDto;
     }
