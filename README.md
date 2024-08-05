@@ -1,7 +1,5 @@
 # Map Quizzes
 
-**⚠️ IMPORTANT: This project is currently under development and is not yet complete. ⚠️**
-
 ## Project Description
 
 Map Quizzes is an interactive web application that offers geographical quizzes focused on physical features of the world. Users can test their knowledge of world mountains and volcanoes through engaging, map-based quizzes.
