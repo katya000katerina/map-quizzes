@@ -39,8 +39,4 @@ The project has implemented core functionality including user authentication, in
 - Database: PostgreSQL, Redis
 - Build Tool: Maven
 - Testing: JUnit 5
-- Additional Libraries: Lombok, JJWT, MapStruct, Apache PDFBox 
----
-
-**Note to potential users:**
-This project is a work in progress. While many core features are functional, some aspects are still under development. Features may be incomplete, and significant changes may occur before the final release. Use at your own risk and check back regularly for updates.
+- Additional Libraries: Lombok, JJWT, MapStruct, Apache PDFBox
