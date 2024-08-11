@@ -19,10 +19,7 @@ The project has implemented core functionality including user authentication, in
 - Personalized quizzes for registered users focusing on previously incorrect answers
 - PDF ranking certificate download for registered users
 - Caching for improved performance
-
-### Planned
-- Home page implementation
-- Comprehensive testing suite
+- API testing
 
 ## Features Showcase
 
